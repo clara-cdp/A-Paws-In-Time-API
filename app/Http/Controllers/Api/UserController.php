@@ -53,7 +53,7 @@ class UserController extends Controller
         $user->update($validated);
 
         return response()->json([
-            'message' => 'Your Profile is been updated.',
+            'message' => 'Your profile is been updated.',
             'user' =>$user
         ],200);
     }
@@ -64,8 +64,6 @@ class UserController extends Controller
      */
     public function destroy(request $request): JsonResponse
     {
-        $user = $request->user();
-
         /** @var \App\Models\User $user */
         $user = $request->user();
         $user->token()->revoke();
