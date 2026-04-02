@@ -22,6 +22,11 @@ Route::prefix('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:api');
 });
 
+Route::middleware('auth:api')->group(function (){
+    Route::get('/me', [UserController::class, 'show']);
+    Route::put('/me', [UserController::class, 'update']);
+    Route::delete('/me',[UserController::class, 'destroy']);
+});
 
 /*Route::middleware(['auth:api', 'role:' . RolesEnum::Admin->value])->group(function () {
     Route::get('/admin/users', [AdminUserController::class, 'index']);
