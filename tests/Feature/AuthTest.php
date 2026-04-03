@@ -61,7 +61,7 @@ beforeEach(function () {
         $tokenId = $tokenResult->token->id;
 
         $response = $this->withToken($token)
-            ->postJson('/api/auth/logout');
+            ->postJson('/api/logout');
 
         $response->assertStatus(200)
             ->assertJson(['message' => 'Successfully logged out']);
@@ -74,6 +74,6 @@ beforeEach(function () {
     });
 
     it('cannot access protected user route without a token', function () {
-        $this->getJson('/api/user')
+        $this->getJson('/api/me')
             ->assertStatus(401);
     });

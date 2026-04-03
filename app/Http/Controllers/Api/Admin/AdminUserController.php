@@ -39,7 +39,6 @@ class AdminUserController extends Controller
      * GET api/admin/user/{user_id}
      */
     public function show(User $user): JsonResponse  
-    //since the user id is  already in the route, no need to find it in the method, correct?
     {
         return response()->json([
             'user' => $user->load('roles')
@@ -80,7 +79,7 @@ class AdminUserController extends Controller
             return response()->json(['message' => 'Action denied: This user is protected.'], 403);
         }
 
-        $user->update(['is_active' => !$user->is_active ]);
+        $user->update(['is_active' => !$user->is_active]);
 
         $status = $user->is_active ? 'unblocked' : 'blocked';
 
