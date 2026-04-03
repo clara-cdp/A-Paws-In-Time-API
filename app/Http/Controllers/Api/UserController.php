@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Enums\RolesEnum;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -67,6 +69,17 @@ class UserController extends Controller
         /** @var \App\Models\User $user */
         $user = $request->user();
         $user->token()->revoke();
+
+        if ($user->hasRole(\App\Enums\RolesEnum::Admin->value, 'api')) {
+
+            $adminCount = \App\Models\User::role(\App\Enums\RolesEnum::Admin->value, 'api')->count();
+
+            if ($adminCount <= 1) {
+                return response()->json([
+                    'message' => 'Action denied: You are the last Admin. Promote another user before deleting your account.'
+                ], 403);
+            }
+        }
 
         $user->delete();
 

@@ -158,7 +158,7 @@ use Illuminate\Support\Facades\Artisan;
         });
 
     // ---> route Access 
-    it('denies a regular player access to any admin route', function () 
+    it('denies a regular user access to any admin route', function () 
         {
             $player = User::factory()->create();
             $player->assignRole(RolesEnum::User->value);
@@ -167,4 +167,40 @@ use Illuminate\Support\Facades\Artisan;
 
             $this->getJson('/api/admin/users')->assertStatus(403);
             $this->deleteJson("/api/admin/users/1")->assertStatus(403);
+        });
+
+    // ---> safety admin checks
+
+    it('prevents last admin to delete itseld', function () 
+        {
+            $lastAdmin = User::factory()->create();
+            $lastAdmin->assignRole(RolesEnum::Admin->value);
+
+            Passport::actingAs($lastAdmin);
+
+            $response = $this->deleteJson('/api/me');
+
+           
+            $response->assertStatus(403)
+                ->assertJsonPath('message', 'Action denied: You are the last Admin. Promote another user before deleting your account.');
+
+            $this->assertDatabaseHas('users', ['id' => $lastAdmin->id]);
+        });
+
+    it('allows an admin to delete itself if other exists', function () 
+        {
+            
+            $admin1 = User::factory()->create();
+            $admin1->assignRole(RolesEnum::Admin->value);
+
+            $admin2 = User::factory()->create();
+            $admin2->assignRole(RolesEnum::Admin->value);
+
+            Passport::actingAs($admin1);
+
+            $response = $this->deleteJson('/api/me');
+
+            $response->assertStatus(200);
+            $this->assertDatabaseMissing('users', ['id' => $admin1->id]);
+            $this->assertDatabaseHas('users', ['id' => $admin2->id]);
         });

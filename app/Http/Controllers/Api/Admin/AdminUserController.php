@@ -39,6 +39,7 @@ class AdminUserController extends Controller
      * GET api/admin/user/{user_id}
      */
     public function show(User $user): JsonResponse  
+
     {
         return response()->json([
             'user' => $user->load('roles')
@@ -119,5 +120,7 @@ class AdminUserController extends Controller
         
         return false;
     }
+
+    
 
 }
