@@ -54,8 +54,8 @@ class User extends Authenticatable
         ];
     }
 
-    // add player now called game --------------
-    public function game()
+    // add player (now called game) --------------
+    public function games()
     {
         return $this->hasMany(Game::class);
     }
