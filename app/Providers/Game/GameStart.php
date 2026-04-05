@@ -63,7 +63,7 @@ class GameStart
                 'is_portable' => $item->is_portable,
                 'is_visible'  => $item->is_visible,
                 'room_id'     => $item->room_id,
-                'interaction_id'    => $item->interaction_id
+                'interaction_id'  => $item->interaction_id
             ]);
         }
     }

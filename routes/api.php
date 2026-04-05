@@ -10,7 +10,7 @@ use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
+    //Public Routes
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);    
@@ -19,6 +19,7 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:api')->group(function (){
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    //Profile Routes
     Route::get('/me', [UserController::class, 'show']);
     Route::put('/me', [UserController::class, 'update']);
     Route::delete('/me',[UserController::class, 'destroy']);
@@ -26,13 +27,15 @@ Route::middleware('auth:api')->group(function (){
     // Game Routes
     Route::get('/games', [GameController::class, 'index']);      
     Route::post('/games', [GameController::class, 'store']);
-    Route::put('/games/{game}', [GameController::class, 'update']);   //continue game 
+    Route::get('/games/{game}', [GameController::class, 'show']);   //shows one game 
+    Route::put('/games/{game}', [GameController::class, 'update']);  //saves / updates a game
     Route::delete('/games/{game}', [GameController::class, 'destroy']);
 
     //Play Routes
-    Route::put('/games/{game}/play', [GameActionController::class, 'update']); //play game
+    Route::post('/games/{game}/actions', [GameActionController::class, 'play']); //play game
 });
 
+    //Admin Routes
 Route::middleware(['auth:api', 'role:' . RolesEnum::Admin->value])
 ->prefix('admin')->group(function () {
     Route::get('/users', [AdminUserController::class, 'index']);
