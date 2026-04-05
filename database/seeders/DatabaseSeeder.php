@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Room;
+use App\Models\Item;
+use App\Models\Interaction;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -29,5 +32,76 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
         ]);
+
+
+        $chapters = ['chapter1.json']; //, 'chapter_2.json', 'chapter_3.json', 'chapter_4.json', 'chapter_5.json'];
+
+
+        foreach ($chapters as $file) {
+            $this->seedChapter($file);
+        }
+
+        $this->command->info('All chapters seeded successfully!');
     }
+
+
+    private function seedChapter(string $fileName): void
+    {
+        $path = database_path("data/{$fileName}");
+
+        if (!file_exists($path)) {
+            $this->command->error("File not found: $path");
+            return;
+        }
+
+        $data = json_decode(file_get_contents($path), true);
+
+        // --- SEED ROOMS ---
+        foreach (($data['rooms'] ?? []) as $room) {
+            Room::updateOrCreate(
+                ['name' => $room['name']],
+                [
+                    'description' => $room['description'],
+                    'image_url'   => $room['image_url'],
+                    'room_type'   => $room['room_type'] ?? 'all',
+                ]
+            );
+        }
+
+        // --- SEED ITEMS ---
+        foreach (($data['items'] ?? []) as $item) {
+            $roomId = !empty($item['room']) ? Room::where('name', $item['room'])->value('id') : null;
+
+            Item::withoutGlobalScopes()->updateOrCreate(
+                ['css_id' => $item['css_id']],
+                [
+                    'description' => $item['description'],
+                    'image_url'   => $item['image_url'] ?? null,
+                    'is_portable' => $item['is_portable'] ?? false,
+                    'is_visible'  => $item['is_visible'] ?? true,
+                    'room_id'     => $roomId,
+                ]
+            );
+        }
+
+        // --- SEED EVENTS ---
+        foreach (($data['events'] ?? []) as $event) {
+            $targetItemId = Item::withoutGlobalScopes()->where('css_id', $event['target_item'])->value('id');
+
+            if ($targetItemId) {
+                Interaction::updateOrCreate([
+                    'verb_trigger'  => $event['verb_trigger'],
+                    'item_id'       => $targetItemId,
+                    'step_required' => $event['step_required'] ?? 0,
+                ], [
+                    'next_step'        => $event['next_step'] ?? 0,
+                    'reward'           => $event['reward'] ?? null,
+                    'required_item_id' => isset($event['required_item']) ? Item::withoutGlobalScopes()->where('css_id', $event['required_item'])->value('id') : null,
+                    'unlocked_item_id' => isset($event['unlocked_item']) ? Item::withoutGlobalScopes()->where('css_id', $event['unlocked_item'])->value('id') : null,
+                    'target_room_id'   => isset($event['target_room']) ? Room::where('name', $event['target_room'])->value('id') : null,
+                ]);
+            }
+        }
+    }
+    
 }
