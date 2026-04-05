@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\GameActionController;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,9 +26,11 @@ Route::middleware('auth:api')->group(function (){
     // Game Routes
     Route::get('/games', [GameController::class, 'index']);      
     Route::post('/games', [GameController::class, 'store']);
-    //Route::put('/games', [GameController::class, 'store']);   
-    //Route::get('/games/{game}', [GameController::class, 'show']); 
-    Route::delete('/games/{game}', [GameController::class, 'destroy']); 
+    Route::put('/games/{game}', [GameController::class, 'update']);   //continue game 
+    Route::delete('/games/{game}', [GameController::class, 'destroy']);
+
+    //Play Routes
+    Route::put('/games/{game}/play', [GameActionController::class, 'update']); //play game
 });
 
 Route::middleware(['auth:api', 'role:' . RolesEnum::Admin->value])

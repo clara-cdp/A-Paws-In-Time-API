@@ -22,13 +22,13 @@ class Game extends Model
         return $this->belongsTo(User::class);
     }
 
-    /*public function pocket()
+    public function pocket()
     {
         return $this->hasOne(Pocket::class);
     }
 
-    public function logEntries()
+    public function Records()
     {
-        return $this->hasMany(Log_entry::class);
-    }*/
+        return $this->hasMany(Record::class);
+    }
 }

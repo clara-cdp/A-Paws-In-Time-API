@@ -83,15 +83,6 @@
             "reward": "If I only had time to play now..."
         },
         {
-            "verb_trigger": "PUSH",
-            "target_item": "statue",
-            "required_item": null,
-            "unlocked_item": "key",
-            "target_room": null,
-            "next_step": 0,
-            "reward": "Did it move at all? "
-        },
-        {
             "verb_trigger": "USE",
             "target_item": "dog",
             "required_item": "tennis ball",
@@ -100,16 +91,6 @@
             "step_required": 1,
             "next_step": 2,
             "reward": "Go play! GOOD BOY!! "
-        },
-        {
-            "verb_trigger": "USE",
-            "target_item": "mansion's door",
-            "required_item": "key",
-            "unlocked_item": null,
-            "target_room": null,
-            "step_required": 2,
-            "next_step": 3,
-            "reward": "It works!"
         }
     ]
 }
