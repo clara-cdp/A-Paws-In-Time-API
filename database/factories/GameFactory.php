@@ -18,7 +18,10 @@ class GameFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'avatar' => $this->faker->name(), 
+            'user_id' => \App\Models\User::factory(),
+            'room_id' => \App\Models\Room::factory(),
+            'progress' => 0,
         ];
     }
 }

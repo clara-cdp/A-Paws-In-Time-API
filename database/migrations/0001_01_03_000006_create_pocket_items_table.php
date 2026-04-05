@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pocket_id')->constrained()->onDelete('cascade');
             $table->foreignId('item_id')->constrained()->onDelete('cascade');
-            //$table->timestamps();
+            $table->timestamps();
         });
     }
 

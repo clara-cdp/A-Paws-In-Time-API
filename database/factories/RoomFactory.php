@@ -18,7 +18,9 @@ class RoomFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->unique()->word() . ' Room', // Provides the missing name
+            'description' => $this->faker->sentence(),
+            'image_url' => 'default_room.png',
         ];
     }
 }

@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('interactions', function (Blueprint $table) {
             $table->id();
-            $table->id();
             $table->string('verb_trigger', 45);
             $table->integer('step_required')->default(0);
             $table->integer('next_step')->default(0);

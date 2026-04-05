@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pockets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('game_id')->constrained()->onDelete('cascade');
-            //$table->timestamps();
+            $table->timestamps();
         });
     }
 

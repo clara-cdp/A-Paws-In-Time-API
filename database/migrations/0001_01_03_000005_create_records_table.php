@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('game_id')->constrained()->onDelete('cascade');
             $table->foreignId('interaction_id')->constrained(); 
 
-            //$table->timestamps();
+            $table->timestamps();
         });
     }
 

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreignId('interaction_id')->nullable()->constrained();
             $table->foreignId('game_id')->nullable()->constrained()->cascadeOnDelete();
 
-            //$table->timestamps();
+            $table->timestamps();
         });
     }
 

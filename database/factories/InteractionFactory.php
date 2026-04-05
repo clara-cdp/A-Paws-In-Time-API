@@ -18,7 +18,11 @@ class InteractionFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'verb_trigger'  => 'LOOK AT',
+            'item_id'       => \App\Models\Item::factory(),
+            'step_required' => 0,
+            'next_step'     => 0,
+            'reward'        => 'You found something interesting!',
         ];
     }
 }

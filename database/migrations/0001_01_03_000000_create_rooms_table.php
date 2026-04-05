@@ -17,7 +17,7 @@ return new class extends Migration
             $table->longText('description');
             $table->string('image_url', 150);
             $table->string('room_type')->default('all');
-            //$table->timestamps();
+            $table->timestamps();
         });
     }
 

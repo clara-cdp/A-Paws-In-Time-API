@@ -55,9 +55,9 @@ class GameController extends Controller
     public function show(Game $game)
     {
         //TODO: add full code here
-        /*if ($game->user_id !== Auth::id()) {
+        if ($game->user_id !== Auth::id()) {
             return response()->json(['message' => 'Forbidden'], 403);
-        }*/
+        }
 
         return response()->json($game, 200);
     }

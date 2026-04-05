@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder; 
+use Illuminate\Support\Facades\Auth;      
 
 class Item extends Model
 {
@@ -21,7 +23,7 @@ class Item extends Model
         'game_id',
     ];
 
-    /*
+    
     public static function starter(): self
     {
         return self::withoutGlobalScopes()
@@ -34,7 +36,7 @@ class Item extends Model
     {
         return $this->belongsToMany(Pocket::class, 'pocket_items');
     }
-
+/*
     protected static function booted()
     {
         static::addGlobalScope('game', function (Builder $builder) {

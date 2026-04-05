@@ -18,7 +18,13 @@ class ItemFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'css_id'      => $this->faker->unique()->word(),
+            'description' => $this->faker->sentence(),
+            'image_url'   => 'items/default.png',
+            'is_portable' => true,
+            'is_visible'  => true,
+            'room_id'     => \App\Models\Room::factory(), // Creates a room if one isn't provided
+            'game_id'     => null, // Default to a "Master" item
         ];
     }
 }

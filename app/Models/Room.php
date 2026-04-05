@@ -17,10 +17,10 @@ class Room extends Model
         'room_type' => RoomType::class,
     ];
 
-    /*public static function startingRoom()
+    public static function startingRoom()
     {
-        return self::where('name', 'The Garden')->firstOrFail(); //what? this is not correct
-    }*/
+        return self::where('name', 'Intro')->firstOrFail(); 
+    }
 
     
 }

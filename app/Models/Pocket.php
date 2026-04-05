@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pocket extends Model
 {
-    protected $fillable = ['player_id'];
+    protected $fillable = ['game_id'];
 
     public function game()
     {
