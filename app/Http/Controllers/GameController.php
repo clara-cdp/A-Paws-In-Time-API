@@ -27,6 +27,12 @@ class GameController extends Controller
      */
     public function store(Request $request, GameStart $startGame)
     {
+        if ($request->user()->games()->count() >= 3) {
+            return response()->json([
+                'message' => 'You have reached the maximum number of save slots (3).'
+            ], 422);
+        }
+        
         $validated = $request->validate([
             'avatar' => 'required|string|max:45|min:3',
         ]);
@@ -39,7 +45,7 @@ class GameController extends Controller
 
             return response()->json([
                 'id' => $game->id,
-                'avatar_name' => $game->avatar,
+                'avatar' => $game->avatar,
                 'room_id' => $game->room_id,
                 'story_step' => $game->progress,
                 'inventory' => $game->pocket->items()->get(['items.id', 'css_id'])
@@ -70,7 +76,7 @@ class GameController extends Controller
 
         return response()->json([
             'id' => $game->id,
-            'avatar_name' => $game->avatar, 
+            'avatar' => $game->avatar, 
             'room_id' => $game->room_id,
             'story_step' => $game->progress,
             'inventory' => $inventory

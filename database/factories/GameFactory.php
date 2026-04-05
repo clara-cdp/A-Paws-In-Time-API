@@ -24,4 +24,14 @@ class GameFactory extends Factory
             'progress' => 0,
         ];
     }
+    /**
+     * Configure the model factory.
+     */
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Game $game) {
+            // This ensures every Game created via factory HAS a Pocket
+            $game->pocket()->create();
+        });
+    }
 }

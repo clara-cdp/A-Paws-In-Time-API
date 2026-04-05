@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Game;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\Passport;
 use Spatie\Permission\Models\Role; 
@@ -15,21 +16,19 @@ beforeEach(function () {
     Artisan::call('passport:client', ['--personal' => true, '--no-interaction' => true]);
 });
 
-
-
     it('can register a new user', function () {
-    $response = $this->postJson('/api/auth/register', [
-        'name' => 'Test User',
-        'email' => 'test@example.com',
-        'password' => 'Password123!',
-        'password_confirmation' => 'Password123!',
-    ]);
+        $response = $this->postJson('/api/auth/register', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'Password123!',
+            'password_confirmation' => 'Password123!',
+        ]);
 
-    $response->assertStatus(201)
-        ->assertJsonStructure(['user', 'token']);
+        $response->assertStatus(201)
+            ->assertJsonStructure(['user', 'token']);
 
-    $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
-});
+        $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
+    });
 
 
     it('can login and receive a passport token', function () {
@@ -77,3 +76,12 @@ beforeEach(function () {
         $this->getJson('/api/me')
             ->assertStatus(401);
     });
+
+    it('requires authentication to access any game routes', function () {
+        Auth::logout();
+
+        $this->getJson('/api/games')->assertStatus(401);
+        $this->postJson('/api/games', ['avatar' => 'Ghost'])->assertStatus(401);
+    });
+
+    

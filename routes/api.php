@@ -27,12 +27,12 @@ Route::middleware('auth:api')->group(function (){
     // Game Routes
     Route::get('/games', [GameController::class, 'index']);      
     Route::post('/games', [GameController::class, 'store']);
-    Route::get('/games/{game}', [GameController::class, 'show']);   //shows one game 
-    Route::put('/games/{game}', [GameController::class, 'update']);  //saves / updates a game
+    Route::get('/games/{game}', [GameController::class, 'show']);   
+    Route::put('/games/{game}', [GameController::class, 'update']);  
     Route::delete('/games/{game}', [GameController::class, 'destroy']);
 
     //Play Routes
-    Route::post('/games/{game}/actions', [GameActionController::class, 'play']); //play game
+    Route::post('/games/{game}/actions', [GameActionController::class, 'play']); 
 });
 
     //Admin Routes
