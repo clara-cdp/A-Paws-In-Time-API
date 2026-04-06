@@ -18,7 +18,7 @@ class ItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'css_id'      => $this->faker->unique()->word(),
+            'name_id'      => $this->faker->unique()->word(),
             'description' => $this->faker->sentence(),
             'image_url'   => 'items/default.png',
             'is_portable' => true,

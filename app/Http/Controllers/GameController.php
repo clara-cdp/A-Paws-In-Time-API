@@ -48,7 +48,7 @@ class GameController extends Controller
                 'avatar' => $game->avatar,
                 'room_id' => $game->room_id,
                 'story_step' => $game->progress,
-                'inventory' => $game->pocket->items()->get(['items.id', 'css_id'])
+                'inventory' => $game->pocket->items()->get(['items.id', 'name_id'])
             ], 201);
 
         } catch (\exception $e){
@@ -71,7 +71,7 @@ class GameController extends Controller
         }
 
         $inventory = $game->pocket->items()
-            ->get(['items.id', 'css_id'])
+            ->get(['items.id', 'name_id'])
             ->makeHidden('pivot');
 
         return response()->json([

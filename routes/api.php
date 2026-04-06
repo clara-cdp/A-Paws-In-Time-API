@@ -9,6 +9,7 @@ use App\Http\Controllers\GameActionController;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MetadataController;
 
     //Public Routes
 Route::prefix('auth')->group(function () {
@@ -32,7 +33,10 @@ Route::middleware('auth:api')->group(function (){
     Route::delete('/games/{game}', [GameController::class, 'destroy']);
 
     //Play Routes
-    Route::post('/games/{game}/actions', [GameActionController::class, 'play']); 
+    Route::post('/games/{game}/actions', [GameActionController::class, 'play']);
+
+    //matadata Routes 
+    Route::get('/metadata', [MetadataController::class, 'index']);
 });
 
     //Admin Routes
@@ -45,4 +49,5 @@ Route::middleware(['auth:api', 'role:' . RolesEnum::Admin->value])
     Route::delete('/users/{user}', [AdminUserController::class, 'destroy']); 
 });
 
+    
 

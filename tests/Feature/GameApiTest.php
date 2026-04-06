@@ -67,7 +67,7 @@ beforeEach(function () {
 
         $this->assertDatabaseHas('items', [
             'game_id' => $gameId,
-            'css_id' => 'fish'
+            'name_id' => 'fish'
         ]);
     });
 
@@ -159,14 +159,14 @@ beforeEach(function () {
         
         $game = Game::factory()->create(['user_id' => $this->user->id, 'avatar' => 'Copi']);
         
-        $fish = Item::factory()->create(['css_id' => 'fish', 'game_id' => $game->id]);
+        $fish = Item::factory()->create(['name_id' => 'fish', 'game_id' => $game->id]);
         $game->pocket->items()->attach($fish->id);
 
         $response = $this ->getJson("/api/games/{$game->id}");
 
         $response->assertStatus(200)
             ->assertJsonPath('avatar', 'Copi')
-            ->assertJsonPath('inventory.0.css_id', 'fish')
+            ->assertJsonPath('inventory.0.name_id', 'fish')
             ->assertJsonStructure([
                 'id',
                 'avatar',

@@ -30,7 +30,7 @@ class GameEngine
                 $targetItem->update(['room_id'=>null]);
                 $game->pocket->items()->syncWithoutDetaching([$targetItem->id]);
             
-                return "Picked up the " . $targetItem->css_id;
+                return "Picked up the " . $targetItem->name_id;
             } else return "I can't pick that up.";
 
         }
@@ -41,12 +41,12 @@ class GameEngine
     {
         $masterTarget = Item::withoutGlobalScopes()
             ->whereNull('game_id')
-            ->where('css_id', $targetItem->css_id)
+            ->where('name_id', $targetItem->name_id)
             ->first();
 
         $masterPocketId = $pocketItem ? Item::withoutGlobalScopes()
             ->whereNull('game_id')
-            ->where('css_id', $pocketItem->css_id)
+            ->where('name_id', $pocketItem->name_id)
             ->value('id') : null;
 
         $interaction = Interaction::where('verb_trigger', $verb->value)
@@ -97,7 +97,7 @@ class GameEngine
             $masterUnlock = Item::withoutGlobalScopes()->find($interaction->unlocked_item_id);
   
             $gameItem = Item::where('game_id', $game->id)
-                ->where('css_id', $masterUnlock->css_id)
+                ->where('name_id', $masterUnlock->name_id)
                 ->first();
 
             if ($gameItem) {

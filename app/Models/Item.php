@@ -13,7 +13,7 @@ class Item extends Model
     use HasFactory;
 
     protected $fillable = [
-        'css_id',    
+        'name_id',    
         'description',
         'image_url',
         'is_portable',
@@ -27,7 +27,7 @@ class Item extends Model
     public static function starter(): self
     {
         return self::withoutGlobalScopes()
-            ->where('css_id', 'fish')
+            ->where('name_id', 'fish')
             ->whereNull('game_id')
             ->firstOrFail();
     }

@@ -1,0 +1,81 @@
+{
+    "rooms": [
+        {
+            "name": "A Library",
+            "description": "A clattered old fashioned library.",
+            "image_url": "assets/rooms/pres_library_1.svg",
+            "room_type": "hor"
+        }
+    ],
+    "items": [
+        {
+            "name_id": "garden door",
+            "description": "Garden looks less creepy from here... ",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "A Library",
+            "image_url": null
+        },
+        {
+            "name_id": "grandfather's clock",
+            "description": "My grandfather had a clock.",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "A Library",
+            "iamge_url": null
+        },
+        {
+            "name_id": "gizmo",
+            "description": "WTH is that?",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "A Library",
+            "image_url": null
+        },
+        {
+            "name_id": "gizmo2",
+            "description": "Ah, classic 'PONGO'.",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "A Library",
+            "image_url": null
+        },
+        {
+            "name_id": "painting",
+            "description": "I miss my Cat... ",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "A Library",
+            "image_url": null
+        },
+        {
+            "name_id": "bookcase",
+            "description": "Not a single good novel. ",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "A Library",
+            "image_url": null
+        }
+    ],
+    "interactions": [
+        {
+            "verb_trigger": "GO TO",
+            "target_item": "mansion's door",
+            "required_item": null,
+            "unlocked_item": null,
+            "target_room": "A Library",
+            "step_required": 3,
+            "next_step": 0,
+            "reward": "Let's go! "
+        },
+        {
+            "verb_trigger": "GO TO",
+            "target_item": "garden door",
+            "required_item": null,
+            "unlocked_item": null,
+            "target_room": "Mansion's Garden",
+            "step_required": 3,
+            "next_step": 0
+        }
+    ]
+}
