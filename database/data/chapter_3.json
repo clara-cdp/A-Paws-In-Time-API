@@ -1,0 +1,168 @@
+{
+    "rooms": [
+        {
+            "name": "Old Library",
+            "description": "Same library but in the past",
+            "image_url": "assets/rooms/old_library.svg",
+            "room_type": "hor"
+        }
+    ],
+    "items": [
+        {
+            "name_id": "vent",
+            "description": "There seems to be a glittering object inside",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Old Library",
+            "image_url": null
+        },
+        {
+            "name_id": "past broken clock",
+            "description": "Can't go back, something fell off...",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Old Library",
+            "image_url": null
+        },
+        {
+            "name_id": "time door",
+            "description": "Awesomow time travelling door",
+            "is_portable": false,
+            "is_visible": false,
+            "room": "Old Library",
+            "image_url": null
+        },
+        {
+            "name_id": "gear",
+            "description": "Gears everywhere",
+            "is_portable": true,
+            "is_visible": false,
+            "room": "Old Library",
+            "image_url": "assets/items/gear.png"
+        },
+        {
+            "name_id": "yarn",
+            "description": "I could make my kitty a pretty hat with all this yarn!",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Old Library",
+            "image_url": null
+        },
+        {
+            "name_id": "magnet",
+            "description": "Always been attracted to these",
+            "is_portable": true,
+            "is_visible": true,
+            "room": "Old Library",
+            "image_url": "assets/items/magnet.png"
+        },
+        {
+            "name_id": "rod",
+            "description": " Muahaha!! who is the mad scientist now?",
+            "is_portable": true,
+            "is_visible": false,
+            "room": "Old Library",
+            "image_url": "assets/items/rod.png"
+        },
+        {
+            "name_id": "rope",
+            "description": "It is stuck...",
+            "is_portable": false,
+            "is_visible": false,
+            "room": "Old Library",
+            "image_url": null
+        },
+        {
+            "name_id": "supplies",
+            "description": "Lots of bits and bobs, painting supplies, notes...",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Old Library",
+            "image_url": null
+        },
+        {
+            "name_id": "jar",
+            "description": "An empty glass container.",
+            "is_portable": true,
+            "is_visible": true,
+            "room": "Old Library",
+            "image_url": "assets/items/jar.png"
+        },
+        {
+            "name_id": "mapa mundi",
+            "description": "World domination trough Time and Relative Space.",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Old Library",
+            "image_url": null
+        },
+        {
+            "name_id": "poster_1",
+            "description": "This obsession for cuckoos is unhealthy.",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Old Library",
+            "image_url": null
+        },
+        {
+            "name_id": "armchair",
+            "description": "No time to rest, (well, just a few years till present time...)",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Old Library",
+            "image_url": null
+        },
+        {
+            "name_id": "painting_2",
+            "description": "Looks familiar",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Old Library",
+            "image_url": null
+        },
+        {
+            "name_id": "curly_plant",
+            "description": "Audrey??",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Old Library",
+            "image_url": null
+        },
+        {
+            "name_id": "no exit",
+            "description": "No way I go out there now, or then... ",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Old Library",
+            "image_url": null
+        }
+    ],
+    "interactions": [
+        {
+            "verb_trigger": "USE",
+            "target_item": "grandfather's clock",
+            "required_item": "cuckoo",
+            "unlocked_item": null,
+            "target_room": "Old Library",
+            "step_required": 3,
+            "next_step": 4,
+            "reward": "WOOO!!"
+        },
+        {
+            "verb_trigger": "USE",
+            "target_item": "yarn",
+            "required_item": "magnet",
+            "unlocked_item": "rod",
+            "target_room": null,
+            "reward": "I present to you the magneto-fishing-rod!"
+        },
+        {
+            "verb_trigger": "USE",
+            "target_item": "vent",
+            "required_item": "rod",
+            "unlocked_item": "gear",
+            "target_room": null,
+            "reward": "It's a gear! so unexpected!"
+        }
+    ]
+}

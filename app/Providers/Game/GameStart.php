@@ -17,7 +17,7 @@ class GameStart
     {
         return DB::transaction(function () use ($user, $avatar) {
 
-        $startingRoom = Room::where('name', "Intro")->firstOrFail();
+            $startingRoom = Room::startingRoom();
 
         $game = Game::create([
             'user_id' => $user->id,
@@ -39,7 +39,7 @@ class GameStart
 
         $playerItem = Item::withoutGlobalScopes()
             ->where('game_id', $game->id) 
-            ->where('css_id', $masterStarter->css_id)
+            ->where('name_id', $masterStarter->name_id)
             ->firstOrFail();
 
         Pocket_item::create([
@@ -57,13 +57,13 @@ class GameStart
         foreach ($masterItems as $item) {
             Item::create([
                 'game_id'     => $game->id,
-                'css_id'      => $item->css_id,
+                'name_id'      => $item->name_id,
                 'description' => $item->description,
                 'image_url'   => $item->image_url,
                 'is_portable' => $item->is_portable,
                 'is_visible'  => $item->is_visible,
                 'room_id'     => $item->room_id,
-                'interaction_id'    => $item->interaction_id
+                'interaction_id'  => $item->interaction_id
             ]);
         }
     }

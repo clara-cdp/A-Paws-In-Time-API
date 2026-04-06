@@ -1,0 +1,46 @@
+{
+    "rooms": [
+        {
+            "name": "The Attic",
+            "description": "Some items have shifted",
+            "image_url": "assets/rooms/attic.svg",
+            "room_type": "ver"
+        },
+        {
+            "name": "The End",
+            "description": "Some items have shifted",
+            "image_url": "assets/rooms/end.svg",
+            "room_type": "hor"
+        }
+    ],
+    "items": [
+        {
+            "name_id": "kitty",
+            "description": "My cat!",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "The Attic",
+            "image_url": "assets/items/kitty.png"
+        }
+    ],
+    "interactions": [
+        {
+            "verb_trigger": "GO TO",
+            "target_item": "secret door",
+            "required_item": null,
+            "unlocked_item": null,
+            "target_room": "The Attic",
+            "step_required": 6,
+            "next_step": 7
+        },
+        {
+            "verb_trigger": "RESCUE",
+            "target_item": "kitty",
+            "required_item": null,
+            "unlocked_item": null,
+            "target_room": "The End",
+            "step_required": 7,
+            "next_step": 8
+        }
+    ]
+}

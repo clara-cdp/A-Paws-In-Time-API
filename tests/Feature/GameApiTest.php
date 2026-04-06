@@ -4,119 +4,224 @@ use App\Models\User;
 use App\Models\Game;
 use App\Models\Room;
 use App\Models\Item;
+use App\Models\Pocket;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-beforeEach(function () {
-
-    $room = Room::firstOrCreate(['name' => 'Intro'], [
-        'description' => 'The start.',
-        'image_url' => 'intro.png'
-    ]);
-
-
-    Item::firstOrCreate(['css_id' => 'fish', 'game_id' => null], [
-        'description' => 'A red hering.',
-        'is_portable' => true,
-        'is_visible' => true,
-        'room_id' => $room->null
-    ]);
-    
+beforeEach(function () {    
     $this->seed(DatabaseSeeder::class);
 
     $this->user = User::factory()->create();
     Passport::actingAs($this->user);
 });
 
-// ---> GET | index
-it('shows all user games', function () {
-    Game::factory()->count(3)->create(['user_id' => $this->user->id]);
+    // ---> GET | index ---------------------------------------------------------------
+    it('shows all user games', function () {
+        Game::factory()->count(3)->create(['user_id' => $this->user->id]);
 
-    $response = $this->getJson('/api/games');
+        $response = $this->getJson('/api/games');
 
-    $response->assertStatus(200)
-        ->assertJsonCount(3);
-});
+        $response->assertStatus(200)
+            ->assertJsonCount(3);
+    });
 
-it('only shows the games belonging to the user', function () {
+    it('only shows the games belonging to the user', function () {
+        
+        $otherUser = User::factory()->create();
+        Game::factory()->create(['user_id' => $otherUser->id, 'avatar' => 'pawstranger']);
+
+        Game::factory()->create(['user_id' => $this->user->id, 'avatar' => 'MyPawsHero']);
+
+        $response = $this->getJson('/api/games');
+
+        $response->assertStatus(200)
+            ->assertJsonCount(1)
+            ->assertJsonPath('0.avatar', 'MyPawsHero');
+    });
+
+    it('shows an empty list for a new user with no games', function () {
     
-    $otherUser = User::factory()->create();
-    Game::factory()->create(['user_id' => $otherUser->id, 'avatar' => 'pawstranger']);
+        $response = $this->getJson('/api/games');
 
-    Game::factory()->create(['user_id' => $this->user->id, 'avatar' => 'MyPawsHero']);
+        $response->assertStatus(200)
+            ->assertJsonCount(0); 
+    });
 
-    $response = $this->getJson('/api/games');
+    // ---> POST | store ---------------------------------------------------------------
+    it('can start a new game world from the seeder templates', function () {
+        
+    $this->withoutExceptionHandling(); 
 
-    $response->assertStatus(200)
-        ->assertJsonCount(1)
-        ->assertJsonPath('0.avatar', 'MyPawsHero');
-});
+        $response = $this->postJson('/api/games', [
+            'avatar' => 'Pawsito'
+        ]);
 
+        $response->assertStatus(201)
+            ->assertJsonPath('avatar', 'Pawsito');
 
-// ---> POST | store
-it('can start a new game world from the seeder templates', function () {
+        $gameId = $response->json('id');
+
+        $this->assertDatabaseHas('games', ['id' => $gameId, 'user_id' => $this->user->id]);
+
+        $this->assertDatabaseHas('items', [
+            'game_id' => $gameId,
+            'name_id' => 'fish'
+        ]);
+    });
+
+    it('fails to create a game with an invalid name', function()
+    {
+        $response = $this->postJson('api/games', [
+            'avatar'=>'x'
+        ]);
+
+        $response->assertStatus(422)
+                ->assertJsonValidationErrors(['avatar']);
+    });
+
+    it('prevents a user from having more than 3 games', function () {
     
-$this->withoutExceptionHandling(); 
+        Game::factory()->count(3)->create(['user_id' => $this->user->id]);
 
-    $response = $this->postJson('/api/games', [
-        'avatar' => 'Pawsito'
-    ]);
+        $response = $this->postJson('/api/games', [
+            'avatar' => 'TooManyPaws'
+        ]);
 
-    $response->assertStatus(201)
-        ->assertJsonPath('avatar', 'Pawsito');
+        $response->assertStatus(422)
+            ->assertJsonPath('message', 'You have reached the maximum number of save slots (3).');
+    });
 
-    $gameId = $response->json('id');
+    // ---> DELETE | destroy --------------------------------------------------
+    it('can delete a game', function () {
+        $game = Game::factory()->create(['user_id' => $this->user->id]);
 
-    $this->assertDatabaseHas('games', ['id' => $gameId, 'user_id' => $this->user->id]);
+        $response = $this->deleteJson("/api/games/{$game->id}");
 
-    $this->assertDatabaseHas('items', [
-        'game_id' => $gameId,
-        'css_id' => 'fish'
-    ]);
-});
+        $response->assertStatus(200);
+        $this->assertDatabaseMissing('games', ['id' => $game->id]);
+    });
 
-it('fails to create a game with an invalid name', function()
-{
-    $response = $this->postJson('api/games', [
-        'avatar'=>'x'
-    ]);
+    it('deletes all associated items when a game is destroyed', function () {
+        
+        $response = $this->postJson('/api/games', ['avatar' => 'pawsina']);
+        $gameId = $response->json('id');
 
-    $response->assertStatus(422)
-            ->assertJsonValidationErrors(['avatar']);
-});
+        $this->assertDatabaseHas('items', ['game_id' => $gameId]);
 
-// ---> DELETE | destroy
-it('can delete a game', function () {
-    $game = Game::factory()->create(['user_id' => $this->user->id]);
+        $this->deleteJson("/api/games/{$gameId}");
 
-    $response = $this->deleteJson("/api/games/{$game->id}");
+        $this->assertDatabaseMissing('items', ['game_id' => $gameId]);
+    });
 
-    $response->assertStatus(200);
-    $this->assertDatabaseMissing('games', ['id' => $game->id]);
-});
-
-it('deletes all associated items when a game is destroyed', function () {
+    it('prevents a user from deleting someone else\'s game', function () {
     
-    $response = $this->postJson('/api/games', ['avatar' => 'Copitina']);
-    $gameId = $response->json('id');
+        $victim = User::factory()->create();
+        $victimsGame = Game::factory()->create(['user_id' => $victim->id, 'avatar' => 'Victim']);
 
-    $this->assertDatabaseHas('items', ['game_id' => $gameId]);
+        $response = $this->deleteJson("/api/games/{$victimsGame->id}");
 
-    $this->deleteJson("/api/games/{$gameId}");
+        $response->assertStatus(403);
 
-    $this->assertDatabaseMissing('items', ['game_id' => $gameId]);
-});
+        $this->assertDatabaseHas('games', ['id' => $victimsGame->id]);
+    });
 
-it('prevents a user from deleting someone else\'s game', function () {
+    it('deletes the pocket when the game is destroyed', function () {
+        $game = \App\Models\Game::factory()->create(['user_id' => $this->user->id]);
+        $pocketId = $game->pocket->id;
+
+        $this->deleteJson("/api/games/{$game->id}")->assertStatus(200);
+
+        $this->assertDatabaseMissing('pockets', ['id' => $pocketId]);
+    });
+
+
+    // --> GET | show() ---------------------------------------------------
+    it('returns the correct game state for a continued game', function () {
+        
+        $introRoom = Room::where('name', 'Intro')->first();
+
+        $game = Game::factory()->create([
+            'user_id' => $this->user->id,
+            'avatar' => 'Pawsome',
+            'room_id' => $introRoom->id,
+            'progress' => 2
+        ]);
+
+        $response = $this->getJson("/api/games/{$game->id}");
+
+        $response->assertStatus(200)
+            ->assertJsonPath('avatar', 'Pawsome');
+    });
+
+    it('can fetch a specific game with inventory', function () {
+        
+        $game = Game::factory()->create(['user_id' => $this->user->id, 'avatar' => 'Copi']);
+        
+        $fish = Item::factory()->create(['name_id' => 'fish', 'game_id' => $game->id]);
+        $game->pocket->items()->attach($fish->id);
+
+        $response = $this ->getJson("/api/games/{$game->id}");
+
+        $response->assertStatus(200)
+            ->assertJsonPath('avatar', 'Copi')
+            ->assertJsonPath('inventory.0.name_id', 'fish')
+            ->assertJsonStructure([
+                'id',
+                'avatar',
+                'room_id',
+                'story_step',
+                'inventory'
+            ]);
+    });
+
+    it('returns a 404 when fetching a game that does not exist', function () {
+        $this->getJson("/api/games/9999")
+            ->assertStatus(404);
+    });
+
    
-    $victim = User::factory()->create();
-    $victimsGame = Game::factory()->create(['user_id' => $victim->id, 'avatar' => 'Victim']);
 
-    $response = $this->deleteJson("/api/games/{$victimsGame->id}");
+    // --> PUT | update()
 
-    $response->assertStatus(403);
+    it('updates the game avatar name', function () {
+        $game = Game::factory()->create(['user_id' => $this->user->id, 'avatar' => 'OldPaws']);
 
-    $this->assertDatabaseHas('games', ['id' => $victimsGame->id]);
-});
+        $response = $this->putJson("/api/games/{$game->id}", [
+            'avatar' => 'NewPaws'
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('games', [
+            'id' => $game->id,
+            'avatar' => 'NewPaws'
+        ]);
+    });
+
+    it('prevents a user from updating someone else\'s game avatar', function () {
+        $otherUser = \App\Models\User::factory()->create();
+        $otherGame = \App\Models\Game::factory()->create(['user_id' => $otherUser->id, 'avatar' => 'OriginalPaw']);
+
+        $response = $this->putJson("/api/games/{$otherGame->id}", [
+            'avatar' => 'Hackedpaw'
+        ]);
+
+        $response->assertStatus(403);
+
+        $this->assertDatabaseHas('games', [
+            'id' => $otherGame->id,
+            'avatar' => 'OriginalPaw'
+        ]);
+    });
+
+    it('fails to update avatar with an invalid name', function () {
+        $game = \App\Models\Game::factory()->create(['user_id' => $this->user->id]);
+
+
+        $this->putJson("/api/games/{$game->id}", [
+            'avatar' => 'pawsypawpawpawpawpawpawpawpawpawpawpawpawpawpawpawpawpawpawpawpawpawpaw',
+        ])->assertStatus(422);
+    });
+

@@ -5,11 +5,13 @@ use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\GameActionController;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MetadataController;
 
-
+    //Public Routes
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);    
@@ -18,6 +20,7 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:api')->group(function (){
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    //Profile Routes
     Route::get('/me', [UserController::class, 'show']);
     Route::put('/me', [UserController::class, 'update']);
     Route::delete('/me',[UserController::class, 'destroy']);
@@ -25,11 +28,18 @@ Route::middleware('auth:api')->group(function (){
     // Game Routes
     Route::get('/games', [GameController::class, 'index']);      
     Route::post('/games', [GameController::class, 'store']);
-    //Route::put('/games', [GameController::class, 'store']);   
-    //Route::get('/games/{game}', [GameController::class, 'show']); 
-    Route::delete('/games/{game}', [GameController::class, 'destroy']); 
+    Route::get('/games/{game}', [GameController::class, 'show']);   
+    Route::put('/games/{game}', [GameController::class, 'update']);  
+    Route::delete('/games/{game}', [GameController::class, 'destroy']);
+
+    //Play Routes
+    Route::post('/games/{game}/actions', [GameActionController::class, 'play']);
+
+    //matadata Routes 
+    Route::get('/metadata', [MetadataController::class, 'index']);
 });
 
+    //Admin Routes
 Route::middleware(['auth:api', 'role:' . RolesEnum::Admin->value])
 ->prefix('admin')->group(function () {
     Route::get('/users', [AdminUserController::class, 'index']);
@@ -39,4 +49,5 @@ Route::middleware(['auth:api', 'role:' . RolesEnum::Admin->value])
     Route::delete('/users/{user}', [AdminUserController::class, 'destroy']); 
 });
 
+    
 

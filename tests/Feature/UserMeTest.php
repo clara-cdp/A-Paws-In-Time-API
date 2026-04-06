@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\models\Game;
 use Laravel\Passport\Passport;
 
     // ---> test GET 
@@ -103,6 +104,22 @@ use Laravel\Passport\Passport;
         $response = $this->getJson('/api/me');
 
         $response->assertStatus(401);
+    });
+
+    it('deletes all associated games and pockets when a user is deleted', function () {
+
+        $user = User::factory()->create();
+        $game = Game::factory()->create(['user_id' => $user->id]);
+        $pocketId = $game->pocket->id;
+        $gameId = $game->id;
+
+        $user->delete();
+
+        $this->assertDatabaseMissing('users', ['id' => $user->id]);
+
+        $this->assertDatabaseMissing('games', ['id' => $gameId]);
+
+        $this->assertDatabaseMissing('pockets', ['id' => $pocketId]);
     });
 
 

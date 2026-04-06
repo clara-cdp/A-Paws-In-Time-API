@@ -12,9 +12,9 @@ class Interaction extends Model
         'step_required',
         'next_step',
         'reward',
-        'object_id',
-        'required_object_id',
-        'unlocked_object_id',
+        'intem_id',
+        'required_intem_id',
+        'unlocked_intem_id',
         'target_room_id',      
     ];
        

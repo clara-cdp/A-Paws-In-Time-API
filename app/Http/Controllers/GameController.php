@@ -27,6 +27,12 @@ class GameController extends Controller
      */
     public function store(Request $request, GameStart $startGame)
     {
+        if ($request->user()->games()->count() >= 3) {
+            return response()->json([
+                'message' => 'You have reached the maximum number of save slots (3).'
+            ], 422);
+        }
+        
         $validated = $request->validate([
             'avatar' => 'required|string|max:45|min:3',
         ]);
@@ -37,7 +43,13 @@ class GameController extends Controller
                 $validated['avatar']
             );
 
-            return response()->json($game, 201);
+            return response()->json([
+                'id' => $game->id,
+                'avatar' => $game->avatar,
+                'room_id' => $game->room_id,
+                'story_step' => $game->progress,
+                'inventory' => $game->pocket->items()->get(['items.id', 'name_id'])
+            ], 201);
 
         } catch (\exception $e){
             return response()->json([
@@ -54,12 +66,21 @@ class GameController extends Controller
      */
     public function show(Game $game)
     {
-        //TODO: add full code here
         if ($game->user_id !== Auth::id()) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        return response()->json($game, 200);
+        $inventory = $game->pocket->items()
+            ->get(['items.id', 'name_id'])
+            ->makeHidden('pivot');
+
+        return response()->json([
+            'id' => $game->id,
+            'avatar' => $game->avatar, 
+            'room_id' => $game->room_id,
+            'story_step' => $game->progress,
+            'inventory' => $inventory
+        ], 200);
     }
 
     /**
@@ -68,11 +89,21 @@ class GameController extends Controller
      */
     public function update(Request $request, Game $game) 
     {
-        //TODO: add full code here
-        //updates will happen when user plays
-        /*if ($game->user_id !== Auth::id()) {
+        if ($game->user_id !== Auth::id()) {
             return response()->json(['message' => 'Forbidden'], 403);
-        }*/
+        }
+
+        $validated = $request->validate([
+            'avatar' => 'nullable|string|max:45',
+        ]);
+
+        $game->update($validated);
+        $game->touch();
+
+        return response()->json([
+            'message' => 'Game progress saved.',
+            'game'    => $game->load('room')
+        ], 200);
     }
 
     /**

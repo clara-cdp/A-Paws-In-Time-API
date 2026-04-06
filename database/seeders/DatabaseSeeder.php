@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        $chapters = ['chapter1.json']; //, 'chapter_2.json', 'chapter_3.json', 'chapter_4.json', 'chapter_5.json'];
+        $chapters = ['chapter_1.json', 'chapter_2.json', 'chapter_3.json', 'chapter_4.json', 'chapter_5.json'];
 
 
         foreach ($chapters as $file) {
@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder
             $roomId = !empty($item['room']) ? Room::where('name', $item['room'])->value('id') : null;
 
             Item::withoutGlobalScopes()->updateOrCreate(
-                ['css_id' => $item['css_id']],
+                ['name_id' => $item['name_id']],
                 [
                     'description' => $item['description'],
                     'image_url'   => $item['image_url'] ?? null,
@@ -84,21 +84,21 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        // --- SEED EVENTS ---
-        foreach (($data['events'] ?? []) as $event) {
-            $targetItemId = Item::withoutGlobalScopes()->where('css_id', $event['target_item'])->value('id');
+        // --- SEED INTERACTIONS ---
+        foreach (($data['interactions'] ?? []) as $interaction) {
+            $targetItemId = Item::withoutGlobalScopes()->where('name_id', $interaction['target_item'])->value('id');
 
             if ($targetItemId) {
                 Interaction::updateOrCreate([
-                    'verb_trigger'  => $event['verb_trigger'],
+                    'verb_trigger'  => $interaction['verb_trigger'],
                     'item_id'       => $targetItemId,
-                    'step_required' => $event['step_required'] ?? 0,
+                    'step_required' => $interaction['step_required'] ?? 0,
                 ], [
-                    'next_step'        => $event['next_step'] ?? 0,
-                    'reward'           => $event['reward'] ?? null,
-                    'required_item_id' => isset($event['required_item']) ? Item::withoutGlobalScopes()->where('css_id', $event['required_item'])->value('id') : null,
-                    'unlocked_item_id' => isset($event['unlocked_item']) ? Item::withoutGlobalScopes()->where('css_id', $event['unlocked_item'])->value('id') : null,
-                    'target_room_id'   => isset($event['target_room']) ? Room::where('name', $event['target_room'])->value('id') : null,
+                    'next_step'        => $interaction['next_step'] ?? 0,
+                    'reward'           => $interaction['reward'] ?? null,
+                    'required_item_id' => isset($interaction['required_item']) ? Item::withoutGlobalScopes()->where('name_id', $interaction['required_item'])->value('id') : null,
+                    'unlocked_item_id' => isset($interaction['unlocked_item']) ? Item::withoutGlobalScopes()->where('name_id', $interaction['unlocked_item'])->value('id') : null,
+                    'target_room_id'   => isset($interaction['target_room']) ? Room::where('name', $interaction['target_room'])->value('id') : null,
                 ]);
             }
         }

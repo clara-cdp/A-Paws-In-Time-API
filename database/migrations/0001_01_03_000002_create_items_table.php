@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->string('css_id', 45);
+            $table->string('name_id', 45);
             $table->longText('description');
             $table->string('image_url', 150)->nullable();
 

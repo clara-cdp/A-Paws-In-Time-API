@@ -1,21 +1,21 @@
 {
     "rooms": [
         {
-            "name": "Intro",
-            "description": "An introduction.",
-            "image_url": "assets/rooms/intro.svg",
-            "room_type": "hor"
-        },
-        {
             "name": "Mansion's Garden",
             "description": "A lush garden outside the Mad Doctor's mansion.",
             "image_url": "assets/rooms/garden_1.svg",
             "room_type": "all"
+        },
+        {
+            "name": "Intro",
+            "description": "An introduction.",
+            "image_url": "assets/rooms/intro.svg",
+            "room_type": "hor"
         }
     ],
     "items": [
         {
-            "css_id": "fish",
+            "name_id": "fish",
             "description": "A red herring",
             "is_portable": false,
             "is_visible": true,
@@ -23,7 +23,7 @@
             "image_url": "assets/items/redHerring.png"
         },
         {
-            "css_id": "start",
+            "name_id": "start",
             "description": "Click 'GO TO' to start your journey",
             "is_portable": false,
             "is_visible": true,
@@ -31,7 +31,7 @@
             "image_url": null
         },
         {
-            "css_id": "tree",
+            "name_id": "tree",
             "description": "Didn't know Cypress had yellow fruits...",
             "is_portable": false,
             "is_visible": true,
@@ -39,7 +39,7 @@
             "image_url": null
         },
         {
-            "css_id": "tennis ball",
+            "name_id": "tennis ball",
             "description": "You only live once, but you get to serve twice",
             "is_portable": true,
             "is_visible": false,
@@ -47,7 +47,31 @@
             "image_url": "assets/items/tennisBall.png"
         },
         {
-            "css_id": "dog",
+            "name_id": "crowbar",
+            "description": "Always useful!",
+            "is_portable": true,
+            "is_visible": true,
+            "room": "Mansion's Garden",
+            "image_url": "assets/items/crowbar.png"
+        },
+        {
+            "name_id": "statue",
+            "description": "Not this again!",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Mansion's Garden",
+            "image_url": null
+        },
+        {
+            "name_id": "key",
+            "description": "I wonder what it does",
+            "is_portable": true,
+            "is_visible": false,
+            "room": "Mansion's Garden",
+            "image_url": "assets/items/key.png"
+        },
+        {
+            "name_id": "dog",
             "description": "YOU SHALL NOT PASS!",
             "is_portable": false,
             "is_visible": true,
@@ -55,10 +79,58 @@
             "image_url": null
         },
         {
-            "css_id": "mansion's door",
+            "name_id": "mansion's door",
             "description": "It's locked.",
             "is_portable": false,
             "is_visible": false,
+            "room": "Mansion's Garden",
+            "image_url": null
+        },
+        {
+            "name_id": "cuckoo",
+            "description": "A cuckoo cookie cook called Cooper could cook cuckoo cookies.",
+            "is_portable": true,
+            "is_visible": true,
+            "room": "Mansion's Garden",
+            "image_url": "assets/items/cuckoo.png"
+        },
+        {
+            "name_id": "grease pot",
+            "description": "Big Barrel of Machinery oil. I am so not carring that.",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Mansion's Garden",
+            "image_url": null
+        },
+        {
+            "name_id": "pile",
+            "description": "Weird mechanical bits.",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Mansion's Garden",
+            "image_url": null
+        },
+        {
+            "name_id": "big_pile",
+            "description": "More mechanical staff...",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Mansion's Garden",
+            "image_url": null
+        },
+        {
+            "name_id": "big_gear",
+            "description": "Don't know what that is.",
+            "is_portable": false,
+            "is_visible": true,
+            "room": "Mansion's Garden",
+            "image_url": null
+        },
+        {
+            "name_id": "blink",
+            "description": " I could swear that thing was five feet back a second ago...",
+            "is_portable": false,
+            "is_visible": true,
             "room": "Mansion's Garden",
             "image_url": null
         }

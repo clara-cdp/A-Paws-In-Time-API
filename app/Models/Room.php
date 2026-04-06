@@ -19,7 +19,7 @@ class Room extends Model
 
     public static function startingRoom()
     {
-        return self::where('name', 'Intro')->firstOrFail(); 
+        return self::where('name','Intro')->firstOrFail(); 
     }
 
     
