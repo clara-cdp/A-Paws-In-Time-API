@@ -14,25 +14,36 @@ class GameEngine
     public function resolve(GameState $state, Game $game): ?string
     {
         /** @var \App\Enums\Verb $verb */
-        $verb = $state->verb; 
+        $verb = $state->verb;
 
-        $targetItem = Item::where('game_id', $game->id)
-        ->find($state->targetItemId);
+        $targetItem = Item::where('game_id', $game->id)->find($state->targetItemId);
+        if (!$targetItem) return "I don't see anything...";
 
-        $pocketItem = $state->itemId ? Item::where('game_id', $game->id)->find($state->itemId):null;
+        if ($state->itemId) {
+            $hasItem = $game->pocket->items()->where('items.id', $state->itemId)->exists();
+            if (!$hasItem) {
+                abort(422, "You don't have that item."); 
+            }
+        }
 
-        if (!$targetItem) return "I don't see anything..."; 
+        $isInRoom = $targetItem->room_id === $game->room_id;
+        $isInPocket = $game->pocket->items()->where('items.id', $targetItem->id)->exists();
+
+        if (!$isInRoom && !$isInPocket) {
+            abort(403, "That is too far away.");
+        }
+
+        $pocketItem = $state->itemId ? Item::where('game_id', $game->id)->find($state->itemId) : null;
 
         if($verb === Verb::LOOK_AT) return $targetItem->description;
 
         if($verb === Verb::PICK_UP){
             if($targetItem->is_portable && $targetItem->is_visible){
                 $targetItem->update(['room_id'=>null]);
-                $game->pocket->items()->syncWithoutDetaching([$targetItem->id]);
-            
+                $game->pocket->items()->syncWithoutDetaching([$targetItem->id]);         
                 return "Picked up the " . $targetItem->name_id;
-            } else return "I can't pick that up.";
-
+            }
+            return "I can't pick that up.";
         }
         return $this->processInteraction($verb, $targetItem, $pocketItem, $game);
     }
@@ -54,10 +65,9 @@ class GameEngine
             ->where('required_item_id', $masterPocketId)
             ->first();
 
-        if (!$interaction) return "That doesn't to do anything...";
+        if (!$interaction) return "That doesn't seem to do anything...";
 
         // check event - interactions 
-        
         if ($interaction->next_step > $interaction->step_required && $game->progress >= $interaction->next_step) {
             return "I've already done that!";
         }
@@ -89,13 +99,13 @@ class GameEngine
 
         // -- remove always pocket items
         if ($pocketItem) {
-            $pocketItem->update(['is_visible'=>false]);
+            $game->pocket->items()->detach($pocketItem->id);
+            $pocketItem->update(['is_visible' => false, 'room_id' => null]);
         }
 
         // -- unlocking items  
         if ($interaction->unlocked_item_id) {
             $masterUnlock = Item::withoutGlobalScopes()->find($interaction->unlocked_item_id);
-  
             $gameItem = Item::where('game_id', $game->id)
                 ->where('name_id', $masterUnlock->name_id)
                 ->first();
@@ -105,8 +115,11 @@ class GameEngine
 
                 if (is_null($gameItem->room_id)) {
                     $game->pocket->items()->syncWithoutDetaching([$gameItem->id]);
-                }
+                } 
             }
+        }
+
+        if ($interaction->reward) {
             $messages[] = $interaction->reward;
         }
 

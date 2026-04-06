@@ -8,6 +8,8 @@ use App\Providers\Game\GameState;
 use App\Providers\Game\GameEngine;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\Verb;
+
 class GameActionController extends Controller
 {
 
@@ -27,7 +29,7 @@ class GameActionController extends Controller
         ]);
 
         $state = new GameState(
-            $validated['verb'],
+            Verb::from($validated['verb']),
             $validated['target_id'],
             $validated['item_id'] ?? null 
         );

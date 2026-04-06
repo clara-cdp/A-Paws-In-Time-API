@@ -6,21 +6,20 @@ use App\Enums\Verb;
 
 class GameState
 {
-    public string|null $verb = null;
-    public int|null $itemId = null;
-    public int|null  $targetItemId = null;
+    public ?Verb $verb = null;
+    public ?int $itemId = null;
+    public ?int $targetItemId = null;
 
-
-   public function __construct(?string $verb=null, ?int $itemId = null, ?int $targetItemId = null, )
-   {
-        $this->verb = $verb ? verb::tryFrom($verb) : null;
-        $this->itemId = $itemId;
+    public function __construct(?Verb $verb = null, ?int $targetItemId = null, ?int $itemId = null)
+    {
+        $this->verb = $verb;
         $this->targetItemId = $targetItemId;
+        $this->itemId = $itemId;
     }
 
     public function checkCompletedActions():bool
     {
-        //get dialog
+        //get description
         if($this->verb === Verb::LOOK_AT && $this->targetItemId) return true;
 
         //unlocking with USE
