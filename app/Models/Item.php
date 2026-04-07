@@ -32,10 +32,17 @@ class Item extends Model
             ->firstOrFail();
     }
 
+    public function scopeStarter($query)
+    {
+        return $query->where('name_id', 'fish')->whereNull('game_id')->first();
+    }
+
     public function pockets()
     {
         return $this->belongsToMany(Pocket::class, 'pocket_items');
-    }
+    } 
+    
+    
 /*
     protected static function booted()
     {

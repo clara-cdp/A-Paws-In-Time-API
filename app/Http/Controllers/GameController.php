@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Providers\Game\GameStart;
+use App\Http\Resources\GameResource; 
+use Illuminate\Http\JsonResponse;
 
 class GameController extends Controller
 {
@@ -15,9 +17,11 @@ class GameController extends Controller
      * GET api/games
      * display all user's games
      */
-    public function index(request $request)
+    public function index(request $request):JsonResponse
     {
-       return response()->json($request->user()->games,200);
+        $saves = $request->user()->games()->get(['id', 'avatar']);
+        //$avatars = $request->user()->games()->pluck('avatar');
+        return response()->json($saves, 200);
     }
 
     /**
@@ -38,24 +42,17 @@ class GameController extends Controller
         ]);
 
         try {
-            $game = $startGame->handle( 
-                $request -> user(), 
-                $validated['avatar']
-            );
+            $game = $startGame->handle($request->user(), $validated['avatar']);
 
             return response()->json([
-                'id' => $game->id,
-                'avatar' => $game->avatar,
-                'room_id' => $game->room_id,
-                'story_step' => $game->progress,
-                'inventory' => $game->pocket->items()->get(['items.id', 'name_id'])
+                'message' => 'New journey started!',
+                'game'    => new GameResource($game->load(['room.items', 'pocket.items']))
             ], 201);
-
-        } catch (\exception $e){
+        } catch (\Exception $e) {
             return response()->json([
-                'message'=>'Failed to start a new game.',
-                'error'=>$e->getMessage()
-            ],500);
+                'message' => 'Failed to start a new game.',
+                'error'   => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -74,13 +71,10 @@ class GameController extends Controller
             ->get(['items.id', 'name_id'])
             ->makeHidden('pivot');
 
-        return response()->json([
-            'id' => $game->id,
-            'avatar' => $game->avatar, 
-            'room_id' => $game->room_id,
-            'story_step' => $game->progress,
-            'inventory' => $inventory
-        ], 200);
+        return response()->json(
+            new GameResource($game->load(['room.items', 'pocket.items'])),
+            200
+        );
     }
 
     /**
@@ -102,7 +96,7 @@ class GameController extends Controller
 
         return response()->json([
             'message' => 'Game progress saved.',
-            'game'    => $game->load('room')
+            'game'    => new GameResource($game->load(['room.items', 'pocket.items']))
         ], 200);
     }
 
