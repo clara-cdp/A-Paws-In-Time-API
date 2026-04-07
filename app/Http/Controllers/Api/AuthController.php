@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\UserResource;
 
 
 class AuthController extends Controller
@@ -17,8 +18,8 @@ class AuthController extends Controller
     public function register(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => 'required | string | max:255',
-            'email' => 'required | string | email | max:255 | unique:users',
+            'name' => 'required | string | min:2 | max:255',
+            'email' => 'required | string | email | unique:users',
             'password' => [
                 'required',
                 'string',
@@ -40,7 +41,10 @@ class AuthController extends Controller
 
         $token = $user->createToken('Personal Access Token')->accessToken;
 
-        return response()->json(['user' => $user, 'token' => $token], 201);
+        return response()->json([
+            'user' => new UserResource($user),
+            'token' => $token,
+        ], 201);
     }
 
     public function login(Request $request): JsonResponse
@@ -59,11 +63,9 @@ class AuthController extends Controller
         $token = $user->createToken('api_token')->accessToken;
 
         return response()->json([
-            'user' => $user,
-            'role'  => $user->getRoleNames()->first(), 
+            'user' => new UserResource($user),
             'token' => $token,
-        ], 200);
-
+        ], 201);
     }
 
     public function logout(Request $request): JsonResponse
