@@ -4,16 +4,17 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 
-class RegisterRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -24,18 +25,10 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:3|max:100',
-            'email' => 'required|email|unique:users,email',
-            'password' => [
-                'required',
-                'confirmed',
-                Password::min(8)
-                    ->letters()   
-                    ->numbers()
-                    ->mixedCase()
-                    ->symbols(),
-            ],
+            'name'  => 'sometimes|string|min:2|max:50',
+            'email' => 'sometimes|email|max:255|unique:users,email,' . $this->user()->id,
+            'password' => 'sometimes|string|min:8|confirmed',
         ];
     }
-
 }
+  

@@ -6,7 +6,7 @@ use App\Enums\RolesEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class userResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -24,6 +24,11 @@ class userResource extends JsonResource
             'email' => $this->email,
             'role' => $roleEnum->value,
             'is_active' => (bool) $this->is_active,
+
+            'games_count' => $this->whenNotNull($this->games_count),
+            'game_list' => $this->whenLoaded('games', function () {
+                return $this->games->pluck('avatar');
+            }),
         ];
     }
 }

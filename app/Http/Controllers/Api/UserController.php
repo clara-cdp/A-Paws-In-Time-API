@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Http\Resources\UserResource;
+use App\Http\Requests\UpdateUserRequest;
 use App\Enums\RolesEnum;
 use App\Models\User;
 
@@ -30,33 +32,23 @@ class UserController extends Controller
      * Display the specified resource.
      * GET /api/me
      */
-    public function show(Request $request): JsonResponse
+    public function show(UpdateUserRequest $request): UserResource
     {
-        $request->user(); 
-        return response()->json([
-            'user'=>$request->user()->load('roles')
-        ],200);
+        return new UserResource($request->user()); 
     }
 
     /**
      * Update the specified resource in storage.
      * PUT /api/me
      */
-    public function update(Request $request) : JsonResponse
+    public function update(UpdateUserRequest $request) : JsonResponse
     {
-        $user = $request->user(); 
-
-        $validated = $request -> validate ([ 
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $user->id, 
-            'password' => 'sometimes|string|min:8|confirmed',
-        ]);
-
-        $user->update($validated);
+        $user = $request->user();
+        $user->update($request->validated());
 
         return response()->json([
-            'message' => 'Your profile is been updated.',
-            'user' =>$user
+            'message' => 'Your profile is been updated.', 
+            'user' => new UserResource($user),
         ],200);
     }
 
@@ -68,8 +60,7 @@ class UserController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = $request->user();
-        $user->token()->revoke();
-
+        
         if ($user->hasRole(\App\Enums\RolesEnum::Admin->value, 'api')) {
 
             $adminCount = \App\Models\User::role(\App\Enums\RolesEnum::Admin->value, 'api')->count();
@@ -81,6 +72,7 @@ class UserController extends Controller
             }
         }
 
+        $user->token()->revoke();
         $user->delete();
 
         return response()->json([
