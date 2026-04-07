@@ -14,7 +14,7 @@ use Laravel\Passport\Passport;
         $response = $this->getJson('/api/me');
 
         $response->assertStatus(200)
-                ->assertJsonPath('user.email',$user->email);
+                ->assertJsonPath('data.email',$user->email);
     });
 
     // ---> test PUT

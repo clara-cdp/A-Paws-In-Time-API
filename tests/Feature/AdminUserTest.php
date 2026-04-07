@@ -60,8 +60,8 @@ use Illuminate\Support\Facades\Artisan;
             $response = $this->getJson("/api/admin/users/{$player->id}");
 
             $response->assertStatus(200)
-                ->assertJsonPath('user.id', $player->id);
-        });
+                ->assertJsonPath('data.id', $player->id);
+                });
 
     // --->  PUT | update() 
     it('allows an admin to update a regular user profile', function () 
