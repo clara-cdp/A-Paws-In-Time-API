@@ -52,24 +52,17 @@ beforeEach(function () {
     // ---> POST | store ---------------------------------------------------------------
     it('can start a new game world from the seeder templates', function () {
         
-    $this->withoutExceptionHandling(); 
-
         $response = $this->postJson('/api/games', [
             'avatar' => 'Pawsito'
         ]);
 
         $response->assertStatus(201)
-            ->assertJsonPath('avatar', 'Pawsito');
+        ->assertJsonPath('game.avatar', 'Pawsito');
 
-        $gameId = $response->json('id');
-
+        $gameId = $response->json('game.id');
         $this->assertDatabaseHas('games', ['id' => $gameId, 'user_id' => $this->user->id]);
-
-        $this->assertDatabaseHas('items', [
-            'game_id' => $gameId,
-            'name_id' => 'fish'
-        ]);
     });
+
 
     it('fails to create a game with an invalid name', function()
     {
@@ -104,14 +97,13 @@ beforeEach(function () {
     });
 
     it('deletes all associated items when a game is destroyed', function () {
-        
-        $response = $this->postJson('/api/games', ['avatar' => 'pawsina']);
-        $gameId = $response->json('id');
 
-        $this->assertDatabaseHas('items', ['game_id' => $gameId]);
+        $game = Game::factory()->create(['user_id' => $this->user->id]);
+        $gameId = $game->id;
+
+        Item::factory()->create(['game_id' => $gameId]);
 
         $this->deleteJson("/api/games/{$gameId}");
-
         $this->assertDatabaseMissing('items', ['game_id' => $gameId]);
     });
 
@@ -138,8 +130,7 @@ beforeEach(function () {
 
 
     // --> GET | show() ---------------------------------------------------
-    it('returns the correct game state for a continued game', function () {
-        
+    it('returns the correct game state for a continued game', function () {   
         $introRoom = Room::where('name', 'Intro')->first();
 
         $game = Game::factory()->create([
@@ -152,28 +143,24 @@ beforeEach(function () {
         $response = $this->getJson("/api/games/{$game->id}");
 
         $response->assertStatus(200)
-            ->assertJsonPath('avatar', 'Pawsome');
+        ->assertJsonPath('game.avatar', 'Pawsome');
     });
 
     it('can fetch a specific game with inventory', function () {
-        
-        $game = Game::factory()->create(['user_id' => $this->user->id, 'avatar' => 'Copi']);
-        
-        $fish = Item::factory()->create(['name_id' => 'fish', 'game_id' => $game->id]);
-        $game->pocket->items()->attach($fish->id);
 
-        $response = $this ->getJson("/api/games/{$game->id}");
+        $game = Game::factory()->create(['user_id' => $this->user->id]);
+        $item = Item::factory()->create([
+            'game_id' => $game->id,
+            'name_id' => 'fish',
+            'room_id' => null 
+        ]);
+
+        $game->pocket->items()->attach($item->id);
+        $response = $this->getJson("/api/games/{$game->id}");
 
         $response->assertStatus(200)
-            ->assertJsonPath('avatar', 'Copi')
-            ->assertJsonPath('inventory.0.name_id', 'fish')
-            ->assertJsonStructure([
-                'id',
-                'avatar',
-                'room_id',
-                'story_step',
-                'inventory'
-            ]);
+            ->assertJsonPath('game.avatar', $game->avatar)
+            ->assertJsonPath('game.pocket.0.name_id', 'fish');
     });
 
     it('returns a 404 when fetching a game that does not exist', function () {

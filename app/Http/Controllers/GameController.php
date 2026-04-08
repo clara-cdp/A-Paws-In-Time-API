@@ -67,14 +67,9 @@ class GameController extends Controller
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        $inventory = $game->pocket->items()
-            ->get(['items.id', 'name_id'])
-            ->makeHidden('pivot');
-
-        return response()->json(
-            new GameResource($game->load(['room.items', 'pocket.items'])),
-            200
-        );
+        return response()->json([
+            'game' => new GameResource($game->load(['room.items', 'pocket.items']))
+        ], 200);
     }
 
     /**
