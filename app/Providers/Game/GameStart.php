@@ -37,6 +37,10 @@ class GameStart
     {
         $masterStarter = Item::starter();
 
+        if (!$masterStarter) {
+            throw new \Exception("Starter item 'fish' not found in master items table.");
+        }
+
         $playerItem = Item::withoutGlobalScopes()
             ->where('game_id', $game->id) 
             ->where('name_id', $masterStarter->name_id)

@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\UserResource;
+use App\Http\Requests\Admin\UpdateAdminRequest;
 
 class AdminUserController extends Controller
 {
@@ -14,16 +18,17 @@ class AdminUserController extends Controller
      * Display a listing of the resource.
      * GET /api/admin/users
      */
-    public function index(): JsonResponse
+    public function index(): AnonymousResourceCollection | JsonResponse
     {
-        $users = User::with('roles')->paginate(10); 
+        $users = User::with('roles','games')
+        ->withCount('games')
+        ->paginate(10); 
 
         if($users->isEmpty()){
             return response()->json(['message' => "No users found"], 404);
         }
 
-        return response()->json($users, 200);
-
+        return UserResource::collection($users);
     }
 
     /**
@@ -38,37 +43,32 @@ class AdminUserController extends Controller
      * Display the specified resource.
      * GET api/admin/user/{user_id}
      */
-    public function show(User $user): JsonResponse  
+    public function show(User $user): UserResource 
 
     {
-        return response()->json([
-            'user' => $user->load('roles')
-        ], 200);
+        $user->load(['roles', 'games'])->loadCount('games');
+
+        return new UserResource($user);
     }
 
     /**
      * Update the specified resource in storage.
      * PUT api/admin/user/{user_id}
      */
-    public function update(Request $request, User $user) : JsonResponse
+    public function update(UpdateAdminRequest $request, User $user) : JsonResponse
     {
 
         if ($this->protectAdmin($user)) {
-
             return response()->json(['message' => 'Action denied: This user is protected.'], 403);
         }
 
-        $validated = $request -> validate([
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $user->id,
-            'is_active' => 'sometimes|boolean'
-        ]);
+        $user->update($request->validated());
 
-        $user->update($validated);
+        $user->load(['roles', 'games'])->loadCount('games');
 
         return response()->json([
             'message' => 'User updated succesfully.',
-            'user' => $user->load('roles')
+            'user' => new UserResource($user) 
         ], 200);
 
     }

@@ -9,6 +9,8 @@ use App\Providers\Game\GameEngine;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Enums\Verb;
+use App\Http\Resources\GameResource;
+use Illuminate\Http\JsonResponse;
 
 class GameActionController extends Controller
 {
@@ -16,7 +18,7 @@ class GameActionController extends Controller
     /**
      * POST api/games/{game}/actions
      */
-    public function play(Request $request, Game $game, GameEngine $engine)
+    public function play(Request $request, Game $game, GameEngine $engine): JsonResponse
     {
         if ($game->user_id !== Auth::id()) {
             return response()->json(['message' => 'Forbidden'], 403);
@@ -42,7 +44,7 @@ class GameActionController extends Controller
 
         return response()->json([
             'message' => $displayMessage,
-            'game'    => $game->fresh(['room', 'pocket.items'])
+            'game'    => new GameResource($game->load(['room.items', 'pocket.items']))
         ], 200);
     }
 

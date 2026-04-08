@@ -22,5 +22,8 @@ class Room extends Model
         return self::where('name','Intro')->firstOrFail(); 
     }
 
-    
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
 }

@@ -8,27 +8,16 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\UserResource;
+use App\Http\Requests\RegisterRequest;
 
 
 class AuthController extends Controller
 {
-    public function register(Request $request): JsonResponse
+    public function register(RegisterRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => 'required | string | max:255',
-            'email' => 'required | string | email | max:255 | unique:users',
-            'password' => [
-                'required',
-                'string',
-                'confirmed',
-                Password::min(8)
-                    ->numbers()
-                    ->mixedCase()
-                    ->symbols(),
-            ],
-        ]);
+        $validated = $request->validated();
 
         $user = User::create([
             'name' => $validated['name'],
@@ -37,10 +26,14 @@ class AuthController extends Controller
         ]);
 
         $user->assignRole(RolesEnum::User->value);
+        $user->load('roles');
 
         $token = $user->createToken('Personal Access Token')->accessToken;
 
-        return response()->json(['user' => $user, 'token' => $token], 201);
+        return response()->json([
+            'user' => new UserResource($user),
+            'token' => $token,
+        ], 201);
     }
 
     public function login(Request $request): JsonResponse
@@ -56,14 +49,13 @@ class AuthController extends Controller
 
         /** @var \App\Models\User $user */
         $user = Auth::user();
+        $user->load('roles');
         $token = $user->createToken('api_token')->accessToken;
 
         return response()->json([
-            'user' => $user,
-            'role'  => $user->getRoleNames()->first(), 
+            'user' => new UserResource($user),
             'token' => $token,
         ], 200);
-
     }
 
     public function logout(Request $request): JsonResponse

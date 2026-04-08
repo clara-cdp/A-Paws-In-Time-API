@@ -73,13 +73,13 @@ beforeEach(function () {
 
         $response = $this->getJson("/api/games/{$game->id}");
         $response->assertStatus(200);
-        $inventory = $response->json('inventory');
+        $inventory = $response->json('game.pocket');
 
         expect($inventory)->toBeArray();
         expect(collect($inventory)->pluck('name_id'))->toContain('fish');
     });
 
-    it('get the right room and pocket for a continued game', function() {
+    it('gets the right room and pocket for a continued game', function() {
         $service = new \App\Providers\Game\GameStart;
         $game = $service->handle($this->user, 'Catniss Aberdeen');
 
@@ -89,15 +89,20 @@ beforeEach(function () {
         $response = $this->getJson("api/games/{$game->id}");
 
         $response->assertStatus(200)
-            ->assertjsonPath('room_id', $oldLibrary->id)
+            ->assertJsonPath('game.current_room.id', $oldLibrary->id)
             ->assertJsonStructure([
-
+                'game' => [
                     'id',
                     'avatar',
-                    'room_id',
-                    'story_step',
-                    'inventory' 
-                ]);
+                    'progress',
+                    'current_room' => [
+                        'id',
+                        'name',
+                        'items'
+                    ],
+                    'pocket'
+                ]
+            ]);
         $response->assertJsonFragment(['name_id' => 'fish']);
     });
         
