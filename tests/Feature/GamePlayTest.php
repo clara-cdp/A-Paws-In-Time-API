@@ -7,6 +7,8 @@ use App\Models\Item;
 use App\Models\Interaction;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Enums\RolesEnum;
+use Database\Seeders\DatabaseSeeder;
 
 uses(RefreshDatabase::class);
 
@@ -108,7 +110,11 @@ beforeEach(function () {
         
     // --->ensure right VERBS are displayed
     it('returns the list of available interaction verbs', function () {
-            $response = $this->getJson('/api/metadata');
+            $admin = User::factory()->create();
+            $admin->assignRole(RolesEnum::Admin->value);
+
+            Passport::actingAs($admin);
+            $response = $this->getJson('/api/admin/metadata');
 
             $response->assertStatus(200)
                 ->assertJsonFragment(['LOOK AT'])
