@@ -1,0 +1,50 @@
+name: '6. METADATA'
+description: 'Static data and enums used across the game engine.'
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/admin/metadata
+    metadata:
+      custom: []
+      groupName: '6. METADATA'
+      groupDescription: 'Static data and enums used across the game engine.'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'View Game Constants.'
+      description: |-
+        Returns a list of all available Verbs and Room Types.
+        Use this to populate UI buttons or validate actions before sending them to the Play endpoint.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+          "verbs": [ "LOOK AT","USE","PICK UP","GO TO","OPEN","RESCUE","PULL","PUSH"],
+          "room_types": ["hor", "ver", "all"]
+          }
+        headers: []
+        description: Success
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null

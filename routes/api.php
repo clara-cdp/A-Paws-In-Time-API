@@ -26,7 +26,7 @@ Route::middleware('auth:api')->group(function (){
     Route::delete('/me',[UserController::class, 'destroy']);
 
     // Game Routes
-    Route::get('/games', [GameController::class, 'index']);      
+    Route::get('/games', [GameController::class, 'index']);
     Route::post('/games', [GameController::class, 'store']);
     Route::get('/games/{game}', [GameController::class, 'show']);   
     Route::put('/games/{game}', [GameController::class, 'update']);  
@@ -34,9 +34,6 @@ Route::middleware('auth:api')->group(function (){
 
     //Play Routes
     Route::post('/games/{game}/actions', [GameActionController::class, 'play']);
-
-    //matadata Routes 
-    Route::get('/metadata', [MetadataController::class, 'index']);
 });
 
     //Admin Routes
@@ -46,7 +43,10 @@ Route::middleware(['auth:api', 'role:' . RolesEnum::Admin->value])
     Route::get('/users/{user}',[AdminUserController::class, 'show']);
     Route::put('/users/{user}', [AdminUserController::class, 'update']);
     Route::put('/users/{user}/block', [AdminUserController::class, 'block']);
-    Route::delete('/users/{user}', [AdminUserController::class, 'destroy']); 
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy']);
+
+    //matadata Routes 
+    Route::get('/metadata', [MetadataController::class, 'index']);
 });
 
     

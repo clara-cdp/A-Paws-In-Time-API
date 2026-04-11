@@ -1,0 +1,170 @@
+name: '5. GAME - PLAY'
+description: |-
+  This is the core engine endpoint where the magic happens. 
+  Use this to interact with the world by sending verbs and targets.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/games/{game_id}/actions'
+    metadata:
+      custom: []
+      groupName: '5. GAME - PLAY'
+      groupDescription: |-
+        This is the core engine endpoint where the magic happens. 
+        Use this to interact with the world by sending verbs and targets.
+      subgroup: ''
+      subgroupDescription: ''
+      title: PLAY
+      description: |-
+        Handles game interactions. Every action returns a narrative message and the updated state
+        of the room and inventory according to the user's story progress.<br>
+
+        <b>HOW TO START PLAYING:<br></b>
+        1. register/login. <br>
+        2. create a new game. <br>
+        3. check the game id and the "start" id. <br>
+        4. fill up 'verb' with "GO TO" (uppercase), <br>
+        5. fill up 'target_id' : use the "start" id number. <br>
+        6. leave blank 'item_id'<br>
+        A new room with objects will appear. <br><br>
+        * Can you 'PICK UP' the crowbar? <br>
+        * try 'LOOK AT' with any item so view a description. <br>
+        * try to 'PUSH' the tree. <br>
+        * try to 'USE' the tennis Ball (pocket item) with the dog (target_id).<br>
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      game_id:
+        custom: []
+        name: game_id
+        description: 'The ID of the game.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      game_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      verb:
+        custom: []
+        name: verb
+        description: |-
+          action verb.
+          <br> Use any of the following:<br>
+          'LOOK AT','USE', 'PICK UP','GO TO', 'OPEN', 'RESCUE','PULL', 'PUSH'.
+          <br>
+        required: true
+        example: 'GO TO'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      target_id:
+        custom: []
+        name: target_id
+        description: target_id.
+        required: true
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      item_id:
+        custom: []
+        name: item_id
+        description: 'The item_id of a pocket item.'
+        required: true
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      verb: 'GO TO'
+      target_id: 0
+      item_id: 0
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          e{
+               "message": "You step through the doorway. Here we Go!",
+                "game": {
+                    "id": 1,
+                    "avatar": "Sir Isaac Mewton",
+                    "progress": 1,
+                    "current_room": {
+                        "id": 1,
+                        "name": "Mansion's Garden",
+                        "image_url": "assets/rooms/garden_1.svg",
+                        "layout_type": "all",
+                        "items": [
+                            {
+                                "id": 60,
+                                "name_id": "tree",
+                                "description": "Didn't know Cypress had yellow fruits...",
+                                "image_url": null,
+                                "is_portable": false,
+                                "is_visible": true
+                            },
+                            {
+                                "id": 61,
+                                "name_id": "tennis ball",
+                                "description": "You only live once, but you get to serve twice",
+                                "image_url": "assets/items/tennisBall.png",
+                                "is_portable": true,
+                                "is_visible": false
+                            },
+                            {
+                            ... ...
+                            },
+                            {
+                                "id": 72,
+                                "name_id": "blink",
+                                "description": " I could swear that thing was five feet back a second ago...",
+                                "image_url": null,
+                                "is_portable": false,
+                                "is_visible": true
+                            }
+                        ]
+                    },
+                    "pocket": [
+                        {
+                            "id": 58,
+                            "name_id": "fish",
+                            "description": "A red herring",
+                            "image_url": "assets/items/redHerring.png",
+                            "is_portable": false,
+                            "is_visible": true
+                        }
+                    ]
+                }
+            }
+
+          Received response (422):{"message": "Action incomplete."}
+        headers: []
+        description: OK
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null

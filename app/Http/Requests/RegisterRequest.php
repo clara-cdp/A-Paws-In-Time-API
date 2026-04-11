@@ -35,6 +35,7 @@ class RegisterRequest extends FormRequest
                     ->mixedCase()
                     ->symbols(),
             ],
+            'password_confirmation' => 'required',
         ];
     }
 

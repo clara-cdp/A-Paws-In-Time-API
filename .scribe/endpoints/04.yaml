@@ -1,0 +1,435 @@
+name: '3. ADMIN'
+description: |-
+  Administrative endpoints for managing the user database.
+  <aside class="warning">All endpoints in this group require <b>Admin</b> privileges.</aside>
+  <aside>
+  You can use the following credentials for testing:<br>
+  <b>Email:</b> adminino@apaws.com<br>
+  <b>Password:</b> Pawsword1!
+  </aside>
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/admin/users
+    metadata:
+      custom: []
+      groupName: '3. ADMIN'
+      groupDescription: |-
+        Administrative endpoints for managing the user database.
+        <aside class="warning">All endpoints in this group require <b>Admin</b> privileges.</aside>
+        <aside>
+        You can use the following credentials for testing:<br>
+        <b>Email:</b> adminino@apaws.com<br>
+        <b>Password:</b> Pawsword1!
+        </aside>
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'ADMIN - INDEX'
+      description: 'Retrieve a paginated list of all users, including their roles and games.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+          {
+            "data": [
+                {
+                    "id": 1,
+                    "name": "Admin",
+                    "email": "adminino@apaws.com",
+                    "role": "Admin",
+                    "is_active": true,
+                    "games_count": 0,
+                    "game_list": []
+                },
+                {
+                    "id": 2,
+                    "name": "Edgar Allan Paw",
+                    "email": "paw@apaws.com",
+                    "role": "User",
+                    "is_active": true,
+                    "games_count": 2,
+                    "game_list": [
+                        "Sir Isaac Mewton",
+                        "Lucifur"
+                    ]
+                },
+                {
+                   //... continued
+          }
+        headers: []
+        description: Success
+      -
+        custom: []
+        status: 403
+        content: '{"message": "The user does not have permission."}'
+        headers: []
+        description: 'No permission'
+      -
+        custom: []
+        status: 404
+        content: '{"message": "No users found"}'
+        headers: []
+        description: 'Not found Users'
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/admin/users/{user_id}'
+    metadata:
+      custom: []
+      groupName: '3. ADMIN'
+      groupDescription: |-
+        Administrative endpoints for managing the user database.
+        <aside class="warning">All endpoints in this group require <b>Admin</b> privileges.</aside>
+        <aside>
+        You can use the following credentials for testing:<br>
+        <b>Email:</b> adminino@apaws.com<br>
+        <b>Password:</b> Pawsword1!
+        </aside>
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'ADMIN - specific user view'
+      description: 'View details of an specific regular user.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_id:
+        custom: []
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      user_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+          {
+               "data": {
+                    "id": 2,
+                    "name": "Edgar Allan Paw",
+                    "email": "paw@apaws.com",
+                    "role": "User",
+                    "is_active": true,
+                    "games_count": 2,
+                    "game_list": [
+                        "Sir Isaac Mewton",
+                        "Lucifur"
+                    ]
+                }
+            }
+          }
+        headers: []
+        description: ok
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/admin/users/{user_id}'
+    metadata:
+      custom: []
+      groupName: '3. ADMIN'
+      groupDescription: |-
+        Administrative endpoints for managing the user database.
+        <aside class="warning">All endpoints in this group require <b>Admin</b> privileges.</aside>
+        <aside>
+        You can use the following credentials for testing:<br>
+        <b>Email:</b> adminino@apaws.com<br>
+        <b>Password:</b> Pawsword1!
+        </aside>
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'ADMIN - UPDATE'
+      description: |-
+        Update the details of a regular user.
+
+        <aside>Note: An admin cannot update a fellow admin data.</aside>
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_id:
+        custom: []
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      user_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'Must be at least 2 characters. Must not be greater than 50 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: zbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      is_active:
+        custom: []
+        name: is_active
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      role:
+        custom: []
+        name: role
+        description: ''
+        required: false
+        example: Admin
+        type: string
+        enumValues:
+          - Admin
+          - User
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: b
+      email: zbailey@example.net
+      is_active: true
+      role: Admin
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+          {
+               "message": "User updated successfully.",
+               "user": {
+                   "id": 3,
+                   "name": "Clawcatra",
+                   "email": "Claw@apaws.com",
+                   "role": "User",
+                   "is_active": true,
+                   "games_count": 2,
+                   "game_list": [
+                       "Clawdia"
+                      "Pawliver"]
+               }
+           }
+          }
+        headers: []
+        description: Updated
+      -
+        custom: []
+        status: 403
+        content: '{"message": "Action denied: This user is protected."}'
+        headers: []
+        description: 'Protected User'
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/admin/users/{user_id}/block'
+    metadata:
+      custom: []
+      groupName: '3. ADMIN'
+      groupDescription: |-
+        Administrative endpoints for managing the user database.
+        <aside class="warning">All endpoints in this group require <b>Admin</b> privileges.</aside>
+        <aside>
+        You can use the following credentials for testing:<br>
+        <b>Email:</b> adminino@apaws.com<br>
+        <b>Password:</b> Pawsword1!
+        </aside>
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        ADMIN - Toggle Block
+        Inverts the 'is_active' status of a user.
+      description: |-
+        If the user was active, they become blocked, and vice versa.
+        Since the user isn't deleted, the email address can not be used again in the future.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_id:
+        custom: []
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      user_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"message": "User has been blocked."}'
+        headers: []
+        description: Blocked
+      -
+        custom: []
+        status: 200
+        content: '{"message": "User has been unblocked."}'
+        headers: []
+        description: Unblocked
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/admin/users/{user_id}'
+    metadata:
+      custom: []
+      groupName: '3. ADMIN'
+      groupDescription: |-
+        Administrative endpoints for managing the user database.
+        <aside class="warning">All endpoints in this group require <b>Admin</b> privileges.</aside>
+        <aside>
+        You can use the following credentials for testing:<br>
+        <b>Email:</b> adminino@apaws.com<br>
+        <b>Password:</b> Pawsword1!
+        </aside>
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'ADMIN - DELETE:'
+      description: |-
+        Permanently remove a user from the database.<br>
+        <aside>NOTE: An admin cannot delete a felow admin.</aside>
+        <aside class="warning">This action is permanent and cannot be undone.</aside>
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      user_id:
+        custom: []
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      user_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null

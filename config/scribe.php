@@ -11,10 +11,13 @@ use function Knuckles\Scribe\Config\removeStrategies;
 
 return [
     // The HTML <title> for the generated documentation.
-    'title' => config('app.name').' API Documentation',
+    'title' => "A Paws in Time - API ", //config('app.name').' API Documentation',
 
     // A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
-    'description' => '',
+    'description' => 'A few users have been set up to test with them freely.<br>
+    For admin purposes you can use the following user:<br>
+    <b>Email:</b> adminino@apaws.com<br>
+    <b>Password:</b> Pawsword1!<br>', 
 
     // Text to place in the "Introduction" section, right after the `description`. Markdown and HTML are supported.
     'intro_text' => <<<'INTRO'
@@ -23,10 +26,11 @@ return [
             <aside>As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
             You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).</aside>
         INTRO,
-
+    
     // The base URL displayed in the docs.
     // If you're using `laravel` type, you can set this to a dynamic string, like '{{ config("app.tenant_url") }}' to get a dynamic base URL.
-    'base_url' => config('app.url'),
+    'base_url' => config('apawsintime.url'),
+    //'base_url' => config('app.url'), --> default
 
     // Routes to include in the docs
     'routes' => [
@@ -99,13 +103,13 @@ return [
         'use_csrf' => false,
 
         // The URL to fetch the CSRF token from (if `use_csrf` is true).
-        'csrf_url' => '/sanctum/csrf-cookie',
+        'csrf_url' =>null, // '/sanctum/csrf-cookie',
     ],
 
     // How is your API authenticated? This information will be used in the displayed docs, generated examples and response calls.
     'auth' => [
         // Set this to true if ANY endpoints in your API use authentication.
-        'enabled' => false,
+        'enabled' => true,
 
         // Set this to true if your API should be authenticated by default. If so, you must also set `enabled` (above) to true.
         // You can then use @unauthenticated or @authenticated on individual endpoints to change their status from the default.
@@ -115,7 +119,7 @@ return [
         'in' => AuthIn::BEARER->value,
 
         // The name of the auth parameter (e.g. token, key, apiKey) or header (e.g. Authorization, Api-Key).
-        'name' => 'key',
+        'name' => 'Authorization', //'key',
 
         // The value of the parameter to be used by Scribe to authenticate response calls.
         // This will NOT be included in the generated documentation. If empty, Scribe will use a random value.
@@ -187,7 +191,7 @@ return [
     // For example, if your logo is in public/img:
     // - 'logo' => '../img/logo.png' // for `static` type (output folder is public/docs)
     // - 'logo' => 'img/logo.png' // for `laravel` type
-    'logo' => false,
+    'logo' => '../images/APIT_logico.png',
 
     // Customize the "Last updated" value displayed in the docs by specifying tokens and formats.
     // Examples:
@@ -257,3 +261,7 @@ return [
         'serializer' => null,
     ],
 ];
+
+
+
+
