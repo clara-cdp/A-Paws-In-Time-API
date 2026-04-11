@@ -1,0 +1,248 @@
+name: '1. ACCOUNT'
+description: |-
+  APIs for managing user accounts. This includes registration of new users, 
+  identity verification through login, and secure session termination.
+  <aside>The <b>Logout</b> endpoint requires a valid Bearer Token.</aside>
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/auth/register
+    metadata:
+      custom: []
+      groupName: '1. ACCOUNT'
+      groupDescription: |-
+        APIs for managing user accounts. This includes registration of new users, 
+        identity verification through login, and secure session termination.
+        <aside>The <b>Logout</b> endpoint requires a valid Bearer Token.</aside>
+      subgroup: ''
+      subgroupDescription: ''
+      title: REGISTER
+      description: 'Allows a User to create an account.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'The name of the user.'
+        required: true
+        example: 'Leonard Nemaw'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'The email of the user.'
+        required: true
+        example: nemawtrek@apaws.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: 'The password.'
+        required: true
+        example: Apawsy123!
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      password_confirmation:
+        custom: []
+        name: password_confirmation
+        description: 'must match password.'
+        required: true
+        example: Apawsy123!
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: 'Leonard Nemaw'
+      email: nemawtrek@apaws.com
+      password: Apawsy123!
+      password_confirmation: Apawsy123!
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 201
+        content: |-
+          {
+            "user": {
+                "id": 15,
+                "name": "Leonard Nemaw",
+                "email": "nemawtrek@apaws.com",
+                "role": "User",
+                "is_active": true
+               }
+          },
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
+        headers: []
+        description: CREATED
+      -
+        custom: []
+        status: 422
+        content: |-
+          { "message": "The email field must be a valid email address.",
+               "errors": {
+                  "email": [
+                      "The email field must be a valid email address."
+                  ]
+              }
+        headers: []
+        description: 'validation error'
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/auth/login
+    metadata:
+      custom: []
+      groupName: '1. ACCOUNT'
+      groupDescription: |-
+        APIs for managing user accounts. This includes registration of new users, 
+        identity verification through login, and secure session termination.
+        <aside>The <b>Logout</b> endpoint requires a valid Bearer Token.</aside>
+      subgroup: ''
+      subgroupDescription: ''
+      title: LOGIN
+      description: 'Allows a User to log in to its own account.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        custom: []
+        name: email
+        description: required.
+        required: false
+        example: paw@apaws.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: required.
+        required: false
+        example: Pawsword2!
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      email: paw@apaws.com
+      password: Pawsword2!
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "user": {
+                "id": 15,
+                "name": "Paw Solo",
+                "email": "spawwars@apaws.com",
+                "role": "User",
+                "is_active": true
+               }
+          },
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
+        headers: []
+        description: OK
+      -
+        custom: []
+        status: 401
+        content: '{ "message": "Invalid Credentials"}'
+        headers: []
+        description: unauthorized
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/logout
+    metadata:
+      custom: []
+      groupName: '1. ACCOUNT'
+      groupDescription: |-
+        APIs for managing user accounts. This includes registration of new users, 
+        identity verification through login, and secure session termination.
+        <aside>The <b>Logout</b> endpoint requires a valid Bearer Token.</aside>
+      subgroup: ''
+      subgroupDescription: ''
+      title: LOGOUT
+      description: |-
+        Revokes the current user's access token to end the session.
+        <aside class="warning">Once revoked, the token can no longer be used to access the resto of protected routes.</aside>
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"message": "Successfully logged out"}'
+        headers: []
+        description: OK
+      -
+        custom: []
+        status: 401
+        content: '{"message": "Unauthenticated."}'
+        headers: []
+        description: Unauthorized
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null

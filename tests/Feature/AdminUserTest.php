@@ -171,7 +171,7 @@ use Illuminate\Support\Facades\Artisan;
 
     // ---> safety admin checks
 
-    it('prevents last admin to delete itseld', function () 
+    it('prevents last admin to delete itself', function () 
         {
             $lastAdmin = User::factory()->create();
             $lastAdmin->assignRole(RolesEnum::Admin->value);
@@ -182,7 +182,7 @@ use Illuminate\Support\Facades\Artisan;
 
            
             $response->assertStatus(403)
-                ->assertJsonPath('message', 'Action denied: You are the last Admin. Promote another user before deleting your account.');
+                ->assertJsonPath('message', 'Action denied: You are the last Admin. Promote another user before deleting your account or contact the Paws Master.');
 
             $this->assertDatabaseHas('users', ['id' => $lastAdmin->id]);
         });

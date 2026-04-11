@@ -24,9 +24,11 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->user()?->id;
+
         return [
             'name'  => 'sometimes|string|min:2|max:50',
-            'email' => 'sometimes|email|max:255|unique:users,email,' . $this->user()->id,
+            'email' => 'sometimes|email|max:255|unique:users,email,'  . $userId,
             'password' => 'sometimes|string|min:8|confirmed',
         ];
     }

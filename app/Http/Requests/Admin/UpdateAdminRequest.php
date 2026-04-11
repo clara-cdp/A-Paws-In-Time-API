@@ -13,7 +13,7 @@ class UpdateAdminRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->hasRole(RolesEnum::Admin->value);
+        return $this->user()?->hasRole(RolesEnum::Admin->value) ?? false;
     }
 
     /**
@@ -27,9 +27,10 @@ class UpdateAdminRequest extends FormRequest
 
         return [
             'name'      => 'sometimes|string|min:2|max:50',
-            'email'     => 'sometimes|email|max:255|unique:users,email,' . $targetUser->id,
+            'email'     => 'sometimes|email|max:255|unique:users,email,' . ($targetUser?->id),
             'is_active' => 'sometimes|boolean',
             'role'      => 'sometimes|string|in:Admin,User',
         ];
     }
+
 }
