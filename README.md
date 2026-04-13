@@ -66,11 +66,9 @@ php artisan key:generate
 ```
 php artisan migrate --seed
 ```
-if prompted:
-WARN  The SQLite database configured for this application does not exist: database/database.sqlite.  
-
-  Would you like to create it? (yes/no) [yes]  
-❯ yes
+>if prompted:  
+>WARN  The SQLite database configured for this application does not exist: database/database.sqlite.  
+>Would you like to create it? (yes/no) [yes]  
 
 6. Initialize Passport 
 - get the security keys
@@ -95,7 +93,7 @@ http://localhost:8000/docs
 php artisan serve
 ```
 
-### 2. set up a client if you haven't done yet:
+### 2. set up a client (if you haven't done so):
 ```
 php artisan passport:client --personal
 ```
@@ -104,10 +102,10 @@ php artisan passport:client --personal
 # POSTMAN TESTING:
 
 Scribe includes a collection to test the api in postman. 
-- In the scribe documenatation menu, under the enpoints click on the _**View Postman collection**_
+- In the scribe documentation menu, under the enpoints click on the _**View Postman collection**_
 - Open Postman  
 - Create a new workspace  
-- once int the workspace, select import  
+- once inside the workspace, select import  
 - paste de json created in **View Postman collection**  
 
 
