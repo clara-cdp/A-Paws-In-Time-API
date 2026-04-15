@@ -151,11 +151,6 @@ class AdminUserController extends Controller
             $user->syncRoles([$request->input('role')]);
         }
 
-        if ($request->has('is_active')) {
-            $user->is_active = $request->boolean('is_active');
-            $user->save();
-        }
-
         $user->load(['roles', 'games'])->loadCount('games');
 
         return response()->json([
