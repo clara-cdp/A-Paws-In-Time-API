@@ -59,9 +59,10 @@ use Illuminate\Support\Facades\Artisan;
 
             $response = $this->getJson("/api/admin/users/{$player->id}");
 
+           
             $response->assertStatus(200)
-                ->assertJsonPath('data.id', $player->id);
-                });
+                ->assertJsonPath('user.id', $player->id);
+            });
 
     // --->  PUT | update() 
     it('allows an admin to update a regular user profile', function () 
@@ -203,4 +204,45 @@ use Illuminate\Support\Facades\Artisan;
             $response->assertStatus(200);
             $this->assertDatabaseMissing('users', ['id' => $admin1->id]);
             $this->assertDatabaseHas('users', ['id' => $admin2->id]);
+        });
+
+
+        //--> ADMIN PROMOTION 
+        it('allows an admin to promote a regular user to admin', function () {
+            $admin = User::factory()->create();
+            $admin->assignRole(RolesEnum::Admin->value);
+
+            $player = User::factory()->create();
+            $player->assignRole(RolesEnum::User->value);
+
+            Passport::actingAs($admin);
+
+            $response = $this->putJson("/api/admin/users/{$player->id}", [
+                'role' => RolesEnum::Admin->value,
+            ]);
+
+            $response->assertStatus(200);
+            expect($player->fresh()->hasRole(RolesEnum::Admin->value))->toBeTrue();
+            
+            $response->assertJsonPath('user.role', RolesEnum::Admin->value);
+        });
+
+        //--> ADMIN DEMOTiON protection
+        it('prevents an admin from demoting another admin', function () {
+            $admin1 = User::factory()->create();
+            $admin1->assignRole(RolesEnum::Admin->value);
+
+            $admin2 = User::factory()->create();
+            $admin2->assignRole(RolesEnum::Admin->value);
+
+            Passport::actingAs($admin1);
+
+            $response = $this->putJson("/api/admin/users/{$admin2->id}", [
+                'role' => RolesEnum::User->value,
+            ]);
+
+            $response->assertStatus(403)
+                ->assertJsonPath('message', 'Action denied: This user is protected.');
+
+            expect($admin2->fresh()->hasRole(RolesEnum::Admin->value))->toBeTrue();
         });

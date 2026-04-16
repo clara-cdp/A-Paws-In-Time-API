@@ -28,8 +28,9 @@ class UpdateAdminRequest extends FormRequest
         return [
             'name'      => 'sometimes|string|min:2|max:50',
             'email'     => 'sometimes|email|max:255|unique:users,email,' . ($targetUser?->id),
-            'is_active' => 'sometimes|boolean',
-            'role'      => 'sometimes|string|in:Admin,User',
+            'password' => 'sometimes|nullable|string|min:8|confirmed',
+            'role' => 'sometimes|string',
+            'is_active' => 'sometimes|boolean'
         ];
     }
 

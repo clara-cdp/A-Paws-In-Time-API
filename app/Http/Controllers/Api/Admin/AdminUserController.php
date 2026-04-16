@@ -107,10 +107,11 @@ class AdminUserController extends Controller
      */
 
     public function show(User $user): UserResource | JsonResponse
-    {   
+    {
         $user->load(['roles', 'games'])->loadCount('games');
-
-        return new UserResource($user);
+        return response()->json([
+            'user' => new UserResource($user)
+        ], 200);
     }
 
     /**
@@ -145,6 +146,10 @@ class AdminUserController extends Controller
         }
 
         $user->update($request->validated());
+
+        if ($request->has('role')) {
+            $user->syncRoles([$request->input('role')]);
+        }
 
         $user->load(['roles', 'games'])->loadCount('games');
 
