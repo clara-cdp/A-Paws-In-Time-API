@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Providers\Game\GameStart;
 use App\Http\Resources\GameResource; 
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\StoreGameRequest;
 
 /**
  * @group 4. GAMES
@@ -83,17 +84,9 @@ class GameController extends Controller
      * 
      * @response 422 escenario="Unprocessable content"{"message": "You have reached the maximum number of save slots (3)."}
      */
-    public function store(Request $request, GameStart $startGame)
+    public function store(StoreGameRequest $request, GameStart $startGame)
     {
-        if ($request->user()->games()->count() >= 3) {
-            return response()->json([
-                'message' => 'You have reached the maximum number of save slots (3).'
-            ], 422);
-        }
-        
-        $validated = $request->validate([
-            'avatar' => 'required|string|max:45|min:3',
-        ]);
+        $validated = $request->validated();
 
         try {
             $game = $startGame->handle($request->user(), $validated['avatar']);
@@ -102,10 +95,11 @@ class GameController extends Controller
                 'message' => 'New journey started!',
                 'game'    => new GameResource($game->load(['room.items', 'pocket.items']))
             ], 201);
+
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Failed to start a new game.',
-                'error'   => $e->getMessage()
+                'error'   => 'An internal error occurred.' // Keep error messages vague for security in production
             ], 500);
         }
     }

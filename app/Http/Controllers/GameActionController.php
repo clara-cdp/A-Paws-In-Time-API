@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Enums\Verb;
 use App\Http\Resources\GameResource;
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\PlayGameRequest;
 
 /**
  * @group 5. GAME - PLAY
@@ -107,17 +108,13 @@ class GameActionController extends Controller
      * 
      * Received response (422):{"message": "Action incomplete."}
      */
-    public function play(Request $request, Game $game, GameEngine $engine): JsonResponse
+    public function play(PlayGameRequest $request, Game $game, GameEngine $engine): JsonResponse
     {
         if ($game->user_id !== Auth::id()) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        $validated = $request->validate([
-            'verb'      => 'required|string',   
-            'target_id' => 'required|integer',  
-            'item_id'   => 'nullable|integer',  
-        ]);
+        $validated = $request->validated();
 
         $state = new GameState(
             Verb::from($validated['verb']),

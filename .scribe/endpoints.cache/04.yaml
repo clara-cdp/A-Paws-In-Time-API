@@ -241,35 +241,45 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      is_active:
+      password:
         custom: []
-        name: is_active
-        description: ''
+        name: password
+        description: 'Must be at least 8 characters.'
         required: false
-        example: true
-        type: boolean
+        example: '-0pBNvYgxw'
+        type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
       role:
         custom: []
         name: role
         description: ''
         required: false
-        example: Admin
+        example: architecto
         type: string
-        enumValues:
-          - Admin
-          - User
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      is_active:
+        custom: []
+        name: is_active
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
       name: b
       email: zbailey@example.net
-      is_active: true
-      role: Admin
+      password: '-0pBNvYgxw'
+      role: architecto
+      is_active: false
     fileParameters: []
     responses:
       -
