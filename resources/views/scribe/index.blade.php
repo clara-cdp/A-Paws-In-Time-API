@@ -173,7 +173,7 @@ Inverts the 'is_active' status of a user.</a>
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: April 11, 2026</li>
+        <li>Last updated: April 18, 2026</li>
     </ul>
 </div>
 
@@ -1624,8 +1624,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"name\": \"b\",
     \"email\": \"zbailey@example.net\",
-    \"is_active\": true,
-    \"role\": \"Admin\"
+    \"password\": \"-0pBNvYgxw\",
+    \"role\": \"architecto\",
+    \"is_active\": false
 }"
 </code></pre></div>
 
@@ -1644,8 +1645,9 @@ const headers = {
 let body = {
     "name": "b",
     "email": "zbailey@example.net",
-    "is_active": true,
-    "role": "Admin"
+    "password": "-0pBNvYgxw",
+    "role": "architecto",
+    "is_active": false
 };
 
 fetch(url, {
@@ -1811,6 +1813,30 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Must be a valid email address. Must not be greater than 255 characters. Example: <code>zbailey@example.net</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="password"                data-endpoint="PUTapi-admin-users--user_id-"
+               value="-0pBNvYgxw"
+               data-component="body">
+    <br>
+<p>Must be at least 8 characters. Example: <code>-0pBNvYgxw</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>role</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="role"                data-endpoint="PUTapi-admin-users--user_id-"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>is_active</code></b>&nbsp;&nbsp;
 <small>boolean</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -1830,21 +1856,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>role</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="role"                data-endpoint="PUTapi-admin-users--user_id-"
-               value="Admin"
-               data-component="body">
-    <br>
-<p>Example: <code>Admin</code></p>
-Must be one of:
-<ul style="list-style-type: square;"><li><code>Admin</code></li> <li><code>User</code></li></ul>
+<p>Example: <code>false</code></p>
         </div>
         </form>
 
