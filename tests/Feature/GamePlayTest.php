@@ -393,11 +393,11 @@ it('prevents trying an interactiong if the step_required is missing', function (
         'item_id' => $key->id
     ]);
 
-    $response->assertStatus(200)
-        ->assertJsonPath('message', "I'll try again later");
+        $response->assertStatus(200)
+            ->assertJsonPath('message', "I'll try again later");
 
-    expect($this->game->refresh()->progress)->toBe(1);
-});
+        expect($this->game->refresh()->progress)->toBe(1);
+    });
 
 it('updates progress when a puzzle is solved', function () {
     $dog = Item::where('game_id', $this->game->id)->where('name_id', 'dog')->firstOrFail();
@@ -421,3 +421,95 @@ it('updates progress when a puzzle is solved', function () {
     $this->game->refresh();
     expect($this->game->progress)->toBe(2);
 });
+
+
+    it('allows moving back and forth between the garden and the library after unlocking the door', function () {
+        $garden = Room::where('name', "Mansion's Garden")->firstOrFail();
+        $library = Room::where('name', "A Library")->firstOrFail();
+
+        $door = Item::where('game_id', $this->game->id)
+            ->where('name_id', "mansion's door")
+            ->firstOrFail();
+
+        $gardenDoor = Item::where('game_id', $this->game->id)
+            ->where('name_id', 'garden door')
+            ->firstOrFail();
+
+        $this->game->update([
+            'room_id' => $garden->id,
+            'progress' => 3,
+        ]);
+
+        $goInside = $this->postJson("/api/games/{$this->game->id}/actions", [
+            'verb' => 'GO TO',
+            'target_id' => $door->id,
+        ]);
+
+        $goInside->assertStatus(200)
+            ->assertJsonPath('game.current_room.id', $library->id);
+
+        $this->game->refresh();
+        expect($this->game->room_id)->toBe($library->id);
+        expect($this->game->progress)->toBe(3);
+
+        $goBackOutside = $this->postJson("/api/games/{$this->game->id}/actions", [
+            'verb' => 'GO TO',
+            'target_id' => $gardenDoor->id,
+        ]);
+
+        $goBackOutside->assertStatus(200)
+            ->assertJsonPath('game.current_room.id', $garden->id);
+
+        $this->game->refresh();
+        expect($this->game->room_id)->toBe($garden->id);
+        expect($this->game->progress)->toBe(3);
+
+        $goInsideAgain = $this->postJson("/api/games/{$this->game->id}/actions", [
+            'verb' => 'GO TO',
+            'target_id' => $door->id,
+        ]);
+
+        $goInsideAgain->assertStatus(200)
+            ->assertJsonPath('game.current_room.id', $library->id);
+
+        $this->game->refresh();
+        expect($this->game->room_id)->toBe($library->id);
+        expect($this->game->progress)->toBe(3);
+    });
+
+    it('keeps story-advancing room transitions as one-time interactions', function () {
+        $attic = Room::where('name', 'The Attic')->firstOrFail();
+        $backInPresent = Room::where('name', 'Back in the present!')->firstOrFail();
+
+        $secretDoor = Item::where('game_id', $this->game->id)
+            ->where('name_id', 'secret door')
+            ->firstOrFail();
+
+        $this->game->update([
+            'room_id' => $backInPresent->id,
+            'progress' => 6,
+        ]);
+
+        $firstTrip = $this->postJson("/api/games/{$this->game->id}/actions", [
+            'verb' => 'GO TO',
+            'target_id' => $secretDoor->id,
+        ]);
+
+        $firstTrip->assertStatus(200)
+            ->assertJsonPath('game.current_room.id', $attic->id);
+
+        $this->game->refresh();
+        expect($this->game->room_id)->toBe($attic->id);
+        expect($this->game->progress)->toBe(7);
+
+        $this->game->update(['room_id' => $backInPresent->id]);
+
+        $secondTrip = $this->postJson("/api/games/{$this->game->id}/actions", [
+            'verb' => 'GO TO',
+            'target_id' => $secretDoor->id,
+        ]);
+
+        $secondTrip->assertStatus(200)
+            ->assertJsonPath('message', "I've already done that!");
+    });
+

@@ -67,12 +67,17 @@ class GameEngine
 
         if (!$interaction) return "That doesn't seem to do anything...";
 
+        //allows to back and forward
+        $isRepeatableTravel =$interaction->verb_trigger === Verb::GO_TO->value &&
+            !is_null($interaction->target_room_id) &&
+            (int) $interaction->next_step === 0;
+
         // check event - interactions 
         if ($interaction->next_step > $interaction->step_required && $game->progress >= $interaction->next_step) {
             return "I've already done that!";
         }
-       
-        if ($game->Records()->where('interaction_id', $interaction->id)->exists()) {
+
+        if (!$isRepeatableTravel && $game->Records()->where('interaction_id', $interaction->id)->exists()) {
             return "I've already done that!";
         }
 
