@@ -84,7 +84,35 @@ just press enter (normally twice)
 
 > you will need to re-run this command each time you refresh the database
 
-## View documentation:
+
+# AUTOMATED TESTING WITH **PEST**
+
+This project includes automated tests built with Pest and Laravel testing tools.
+
+Run all tests locally
+```
+php artisan test
+```
+You can also run:
+```
+composer test
+```
+Run only one test file:
+```
+php artisan test tests/Feature/NameOfTest.php
+```
+Example:
+```
+php artisan test tests/Feature/GamePlayTest.php
+```
+<img width="1130" height="791" alt="Screenshot 2026-04-19 103413" src="https://github.com/user-attachments/assets/dffb0aa1-5c97-4695-9d1f-6702f1bb4e09" />
+<img width="1104" height="651" alt="Screenshot 2026-04-19 103429" src="https://github.com/user-attachments/assets/1e9b1c24-e491-4e1f-a113-5ef0cbaaf892" />
+
+
+# ✅ MANUAL API TESTING
+
+## ✍️ SCRIBE
+
 The API documentation will be available at 
 http://localhost:8000/docs
 
@@ -99,7 +127,8 @@ php artisan passport:client --personal
 ```
 > when prompted: just press enter (normally twice)
 
-# POSTMAN TESTING:
+
+## 👩‍🚀 POSTMAN
 
 Scribe includes a collection to test the api in postman. 
 - In the scribe documentation menu, under the enpoints click on the _**View Postman collection**_
@@ -108,10 +137,7 @@ Scribe includes a collection to test the api in postman.
 - once inside the workspace, select import  
 - paste de json created in **View Postman collection**  
 
-
 <img width="300" height="auto" alt="import" src="https://github.com/user-attachments/assets/4942ed78-730e-4c30-a1e4-4d9ddcd87838" />
-
-
 
 ## TEST CREDENTIALS
 
