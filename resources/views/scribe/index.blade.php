@@ -173,7 +173,7 @@ Inverts the 'is_active' status of a user.</a>
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: April 18, 2026</li>
+        <li>Last updated: April 21, 2026</li>
     </ul>
 </div>
 
@@ -1626,7 +1626,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"email\": \"zbailey@example.net\",
     \"password\": \"-0pBNvYgxw\",
     \"role\": \"architecto\",
-    \"is_active\": false
+    \"is_active\": true
 }"
 </code></pre></div>
 
@@ -1647,7 +1647,7 @@ let body = {
     "email": "zbailey@example.net",
     "password": "-0pBNvYgxw",
     "role": "architecto",
-    "is_active": false
+    "is_active": true
 };
 
 fetch(url, {
@@ -1856,7 +1856,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
         </form>
 
@@ -2527,7 +2527,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/games/1" \
+    --get "http://localhost:8000/api/games/16" \
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2535,7 +2535,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/games/1"
+    "http://localhost:8000/api/games/16"
 );
 
 const headers = {
@@ -2685,10 +2685,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="game_id"                data-endpoint="GETapi-games--game_id-"
-               value="1"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the game. Example: <code>1</code></p>
+<p>The ID of the game. Example: <code>16</code></p>
             </div>
                     </form>
 
@@ -2706,7 +2706,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost:8000/api/games/1" \
+    "http://localhost:8000/api/games/16" \
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2718,7 +2718,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/games/1"
+    "http://localhost:8000/api/games/16"
 );
 
 const headers = {
@@ -2895,10 +2895,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="game_id"                data-endpoint="PUTapi-games--game_id-"
-               value="1"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the game. Example: <code>1</code></p>
+<p>The ID of the game. Example: <code>16</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -2930,7 +2930,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost:8000/api/games/1" \
+    "http://localhost:8000/api/games/16" \
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2938,7 +2938,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/games/1"
+    "http://localhost:8000/api/games/16"
 );
 
 const headers = {
@@ -3066,10 +3066,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="game_id"                data-endpoint="DELETEapi-games--game_id-"
-               value="1"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the game. Example: <code>1</code></p>
+<p>The ID of the game. Example: <code>16</code></p>
             </div>
                     </form>
 
@@ -3109,7 +3109,7 @@ A new room with objects will appear. <br><br></li>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost:8000/api/games/1/actions" \
+    "http://localhost:8000/api/games/16/actions" \
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -3123,7 +3123,7 @@ A new room with objects will appear. <br><br></li>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/games/1/actions"
+    "http://localhost:8000/api/games/16/actions"
 );
 
 const headers = {
@@ -3300,10 +3300,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="game_id"                data-endpoint="POSTapi-games--game_id--actions"
-               value="1"
+               value="16"
                data-component="url">
     <br>
-<p>The ID of the game. Example: <code>1</code></p>
+<p>The ID of the game. Example: <code>16</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">

@@ -173,14 +173,14 @@ endpoints:
         name: game_id
         description: 'The ID of the game.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      game_id: 1
+      game_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -260,14 +260,14 @@ endpoints:
         name: game_id
         description: 'The ID of the game.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      game_id: 1
+      game_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -381,14 +381,14 @@ endpoints:
         name: game_id
         description: 'The ID of the game.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      game_id: 1
+      game_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
