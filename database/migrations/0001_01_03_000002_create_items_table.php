@@ -21,7 +21,6 @@ return new class extends Migration
             $table->boolean('is_visible')->default(true);   
 
             $table->foreignId('room_id')->nullable()->constrained();
-            $table->foreignId('interaction_id')->nullable()->constrained();
             $table->foreignId('game_id')->nullable()->constrained()->cascadeOnDelete();
 
             $table->timestamps();

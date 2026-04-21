@@ -19,7 +19,6 @@ class Item extends Model
         'is_portable',
         'is_visible',
         'room_id',
-        'interaction_id',
         'game_id',
     ];
 
