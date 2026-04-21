@@ -266,7 +266,7 @@ endpoints:
         name: is_active
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -277,7 +277,7 @@ endpoints:
       email: zbailey@example.net
       password: '-0pBNvYgxw'
       role: architecto
-      is_active: false
+      is_active: true
     fileParameters: []
     responses:
       -
