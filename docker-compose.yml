@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: apit-api
     ports:
-      - "8000:80"
+      - "8000:10000"
     volumes:
       - .:/var/www/html
       - sqlite_data:/data

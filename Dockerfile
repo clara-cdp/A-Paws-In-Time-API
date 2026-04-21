@@ -6,11 +6,12 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libsqlite3-dev \
     sqlite3 \
+    libpq-dev \
     libonig-dev \
     libzip-dev \
     libicu-dev \
     nginx \
-    && docker-php-ext-install pdo pdo_sqlite mbstring zip intl \
+    && docker-php-ext-install pdo pdo_pgsql pdo_sqlite mbstring zip intl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -29,6 +30,6 @@ RUN mkdir -p /data database storage/framework/cache storage/framework/sessions s
 
 COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 
-EXPOSE 80
+EXPOSE 10000
 
 CMD sh -c "php artisan config:clear && php artisan route:clear && php artisan view:clear && php artisan migrate --force && php-fpm -D && nginx -g 'daemon off;'"
