@@ -66,8 +66,7 @@ class GameStart
                 'image_url'   => $item->image_url,
                 'is_portable' => $item->is_portable,
                 'is_visible'  => $item->is_visible,
-                'room_id'     => $item->room_id,
-                'interaction_id'  => $item->interaction_id
+                'room_id'     => $item->room_id
             ]);
         }
     }
