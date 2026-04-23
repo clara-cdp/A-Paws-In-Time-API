@@ -9,22 +9,39 @@ players interact with a dynamic 2D environment, collecting era-specific items an
 puzzles to reach the Doctor's attic where the cat is trapped, 
 restarting the clock before the "Perfect Moment" becomes a permanent cage.
 
+## 📚 Table of Contents
+
+- [Technologies](#-technologies)
+- [Getting Started](#-getting-started)
+  - [Traditional Setup](#-option-1-traditional-setup)
+  - [Docker Setup](#-option-2-docker-setup-recommended)
+- [Deployment (Render)](#-deployment-render)
+- [Automated Testing (Pest)](#-automated-testing-with-pest)
+- [API Testing](#-manual-api-testing)
+
+
 # 🛠 Technologies
 - Framework: Laravel 12 (PHP 8.4+)   
 - Authentication: Laravel Passport (OAuth2)   
 - Authorization: Spatie Roles & Permissions   
 - Testing: Pest Framework   
 - Documentation: Scribe
+- Deployment: Docker + Render + PostgreSQL
 
 # 🚀 Getting Started
-### Prerequisites
+You can run the project in two ways:
+
+🧩 Traditional (PHP + Composer)   
+🐳 Docker (recommended)
+
+### 🧩 Option 1: Traditional Setup
+
+#### Prerequisites
 * PHP 8.4+
 * Composer
 * SQLite
 
-## Installation & Setup
-
-### 1. Clone the repository
+**1. Clone the repository**
 
 ```
 git clone [https://github.com/clara-cdp/A-Paws-In-Time-API.git](https://github.com/clara-cdp/A-Paws-In-Time-API.git)
@@ -33,12 +50,12 @@ git clone [https://github.com/clara-cdp/A-Paws-In-Time-API.git](https://github.c
 ```
 cd A-PAWS-IN-TIME-API
 ```
-### 2. Install dependencies
+**2. Install dependencies**
 ```
 composer install
 ```
 
-### 3. set up enviroment
+**3. set up enviroment**
 - copy enviroment folder
 ```
 cp .env.example .env
@@ -58,19 +75,20 @@ DB_CONNECTION=sqlite
  DB_USERNAME=root
  DB_PASSWORD=
 ```
-### 4. 🔑 Generate aap key:
+**4. 🔑 Generate aap key:**
 ```
 php artisan key:generate
 ```
-### 5.Run migrations and seed the world data
+**5.Run migrations and seed the world data**
 ```
 php artisan migrate --seed
 ```
->if prompted:  
->WARN  The SQLite database configured for this application does not exist: database/database.sqlite.  
+
+>When prompted:   
+>The SQLite database configured for this application does not exist: database/database.sqlite.  
 >Would you like to create it? (yes/no) [yes]  
 
-6. Initialize Passport 
+**6. Initialize Passport **
 - get the security keys
 ```
 php artisan passport:keys
@@ -79,13 +97,110 @@ php artisan passport:keys
 ```
 php artisan passport:client --personal
 ```
-when prompted:  
-just press enter (normally twice)  
+>just press enter for defaults (normally twice)  
 
 > you will need to re-run this command each time you refresh the database
 
+**Access:**
 
-# AUTOMATED TESTING WITH **PEST**
+API → http://localhost:8000  
+Docs → http://localhost:8000/docs  
+
+
+### 🐳 Option 2: Docker Setup (Recommended)
+
+Prerequisites  
+⚠️ Docker Desktop installed and running  
+**1. Clone repository**
+```
+git clone https://github.com/clara-cdp/A-Paws-In-Time-API.git
+cd A-Paws-In-Time-API
+```
+**3. Set up environment**
+```
+cp .env.example .env
+```
+- Edit .env:
+```
+APP_NAME="A Paws in Time"
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=sqlite
+DB_DATABASE=/data/database.sqlite
+SESSION_DRIVER=file
+```
+**3. Build and run containers**
+```  
+docker compose up --build
+```
+**4. Generate the application key**
+
+Open a NEW terminal and run:
+```
+docker compose exec app php artisan key:generate
+```
+**5. Create the Passport personal access client**
+```
+docker compose exec app php artisan passport:client --personal
+```
+>When prompted, press 'Enter' for the default values.
+
+**Access**
+API → http://localhost:8000   
+Docs → http://localhost:8000/docs  
+
+### 😸 Useful Docker Commands
+
+Stop containers
+```
+docker compose down
+```
+Remove containers + volumes (full reset)
+```
+docker compose down -v
+```
+Run migrations
+```
+docker compose exec app php artisan migrate
+```
+Seed database
+```
+docker compose exec app php artisan db:seed
+```
+Fresh reset
+```
+docker compose exec app php artisan migrate:fresh --seed
+```
+Regenerate Scribe docs
+```
+docker compose exec app php artisan scribe:generate
+```
+
+# ☁️ Deployment (Render)
+
+This API is deployed using Render + Docker + PostgreSQL.
+
+Production Stack   
+Hosting: Render   
+Runtime: Docker     
+Database: PostgreSQL (Render managed)   
+Environment Variables (Render)   
+
+**🔍 How to Review the Deployment**
+
+You can test the API directly from the browser using Scribe:
+
+Open the documentation:  
+https://a-paws-in-time-api.onrender.com/docs  
+
+>⚠️ Note: The service runs on Render’s free tier.
+>The first request may take 20-50 seconds due to cold starts.
+
+
+# 🧪 Automated Testing with Pest
 
 This project includes automated tests built with Pest and Laravel testing tools.
 
@@ -109,12 +224,14 @@ php artisan test tests/Feature/GamePlayTest.php
 <img width="1104" height="651" alt="Screenshot 2026-04-19 103429" src="https://github.com/user-attachments/assets/1e9b1c24-e491-4e1f-a113-5ef0cbaaf892" />
 
 
-# ✅ MANUAL API TESTING
+# ✅ Manual API Testing
 
 ## ✍️ SCRIBE
 
 The API documentation will be available at 
 http://localhost:8000/docs
+
+Use the [test credentials](#test-credentials) below.
 
 ### 1. run the localhost:
 ```
@@ -125,7 +242,6 @@ php artisan serve
 ```
 php artisan passport:client --personal
 ```
-> when prompted: just press enter (normally twice)
 
 
 ## 👩‍🚀 POSTMAN
@@ -169,10 +285,8 @@ Scribe includes a collection to test the api in postman.
 | **Admin** | `GET` | `/api/admin/metadata` | View world enums and constants | 🛡️ |
 
 
-
 <img width="2565" height="1716" alt="POST_api-auth-login" src="https://github.com/user-attachments/assets/d194cef5-1749-48e5-968f-b98e13c3c98b" />
 <img width="1122" height="918" alt="POST-api-games-6-actions-PLAY" src="https://github.com/user-attachments/assets/dbbbc9ad-d375-49a6-afe7-7f5b72fe129a" />
-
 
 
 ---
