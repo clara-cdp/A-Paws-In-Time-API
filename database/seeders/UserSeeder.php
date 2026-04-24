@@ -14,21 +14,29 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'adminino@apaws.com',
-            'password' => "Pawsword1!"
-        ])->assignRole(RolesEnum::Admin->value);
+        $admin = User::updateOrCreate(
+            ['email' => 'adminino@apaws.com'],
+            [
+                'name' => 'Admin',
+                'password' => bcrypt("Pawsword1!")
+            ]
+        );
+        $admin->assignRole(RolesEnum::Admin->value);
 
-        User::factory()->create([
-            'name' => 'Edgar Allan Paw',
-            'email' => 'paw@apaws.com',
-            'password' => "Pawsword2!"
-        ])->assignRole(RolesEnum::User->value);
+        $paw = User::updateOrCreate(
+            ['email' => 'paw@apaws.com'],
+            [
+                'name' => 'Edgar Allan Paw',
+                'password' => bcrypt("Pawsword2!")
+            ]
+        );
+        $paw->assignRole(RolesEnum::User->value);
 
-        User::factory(5)->create()->each(function ($user) {
-            $user->assignRole(\App\Enums\RolesEnum::User->value);
-        });
+        if (User::count() < 10) {
+            User::factory(5)->create()->each(function ($user) {
+                $user->assignRole(\App\Enums\RolesEnum::User->value);
+            });
+        }
     }
 
 }
