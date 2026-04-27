@@ -15,29 +15,14 @@ class RoleSeeder extends Seeder
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $userRole = Role::findOrCreate(RolesEnum::User->value, 'api');
+        Role::findOrCreate(RolesEnum::User->value, 'api');
         $adminRole = Role::findOrCreate(RolesEnum::Admin->value, 'api');
 
 
-        $viewUsersPermission = Permission::create([
-            'name' => PermissionsEnum::ViewUsers->value,
-            'guard_name' => 'api',
-        ]);
-
-        $editUsersPermission = Permission::create([
-            'name' => PermissionsEnum::EditUsers->value,
-            'guard_name' => 'api',
-        ]);
-
-        $deleteUserPermission = Permission::create([
-            'name' => PermissionsEnum::DeleteUsers->value,
-            'guard_name' => 'api',
-        ]);
-
-        $blockUserPermission = Permission::create([
-            'name' => PermissionsEnum::BlockUsers->value,
-            'guard_name' => 'api',
-        ]);
+        Permission::findOrCreate(PermissionsEnum::ViewUsers->value, 'api');
+        Permission::findOrCreate(PermissionsEnum::EditUsers->value, 'api');
+        Permission::findOrCreate(PermissionsEnum::DeleteUsers->value, 'api');
+        Permission::findOrCreate(PermissionsEnum::BlockUsers->value, 'api');
 
         // ----------------- permissions assingment ------------------
 

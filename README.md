@@ -297,5 +297,3 @@ Clara Cerdà de Palou
 Barcelona Activa Fullstack PHP Bootcamp (2025/2026)
 
 
-
-
