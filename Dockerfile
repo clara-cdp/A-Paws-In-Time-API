@@ -32,4 +32,4 @@ COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 
 EXPOSE 10000
 
-CMD sh -c "php artisan config:clear && php artisan route:clear && php artisan view:clear && php artisan migrate --force && php-fpm -D && nginx -g 'daemon off;'"
+CMD sh -c "php artisan config:clear && php artisan route:clear && php artisan view:clear && php artisan migrate --force && php artisan db:seed --force && php artisan passport:ensure-personal-client --name='A Paws In Time Personal Access Client' --provider=users && php-fpm -D && nginx -g 'daemon off;'"
