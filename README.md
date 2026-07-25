@@ -28,6 +28,188 @@ restarting the clock before the "Perfect Moment" becomes a permanent cage.
 - Documentation: Scribe
 - Deployment: Docker + Render + PostgreSQL
 
+# 🧬 project structure 
+
+```
+APIT-API/
+├── app/
+│ ├── Enums/
+│ │ ├── PermissionsEnum.php
+│ │ ├── RolesEnum.php
+│ │ ├── RoomType.php
+│ │ └── Verb.php
+│ ├── Http/
+│ │ ├── Controllers/
+│ │ │ ├── Controller.php
+│ │ │ ├── GameActionController.php
+│ │ │ ├── GameController.php
+│ │ │ ├── MetadataController.php
+│ │ │ └── Api/
+│ │ │ ├── AuthController.php
+│ │ │ ├── UserController.php
+│ │ │ └── Admin/
+│ │ │ └── AdminUserController.php
+│ │ ├── Requests/
+│ │ │ ├── PlayGameRequest.php
+│ │ │ ├── RegisterRequest.php
+│ │ │ ├── StoreGameRequest.php
+│ │ │ ├── UpdateUserRequest.php
+│ │ │ └── Admin/
+│ │ │ └── UpdateAdminRequest.php
+│ │ └── Resources/
+│ │ ├── GameResource.php
+│ │ ├── ItemResource.php
+│ │ ├── RoomResource.php
+│ │ └── UserResource.php
+│ ├── Models/
+│ │ ├── Game.php
+│ │ ├── Interaction.php
+│ │ ├── Item.php
+│ │ ├── Pocket.php
+│ │ ├── Pocket_item.php
+│ │ ├── Record.php
+│ │ ├── Room.php
+│ │ └── User.php
+│ └── Providers/
+│ ├── AppServiceProvider.php
+│ └── Game/
+│ ├── GameEngine.php
+│ ├── GameStart.php
+│ └── GameState.php
+├── bootstrap/
+│ ├── app.php
+│ ├── providers.php
+│ └── cache/
+├── config/
+│ ├── app.php
+│ ├── auth.php
+│ ├── cache.php
+│ ├── database.php
+│ ├── filesystems.php
+│ ├── logging.php
+│ ├── mail.php
+│ ├── passport.php
+│ ├── permission.php
+│ ├── queue.php
+│ ├── scribe.php
+│ ├── services.php
+│ └── session.php
+├── database/
+│ ├── data/
+│ │ ├── chapter_1.json
+│ │ ├── chapter_2.json
+│ │ ├── chapter_3.json
+│ │ ├── chapter_4.json
+│ │ └── chapter_5.json
+│ ├── factories/
+│ │ ├── GameFactory.php
+│ │ ├── InteractionFactory.php
+│ │ ├── ItemFactory.php
+│ │ ├── PocketFactory.php
+│ │ ├── PocketItemFactory.php
+│ │ ├── RecordFactory.php
+│ │ ├── RoomFactory.php
+│ │ └── UserFactory.php
+│ ├── migrations/
+│ │ ├── 0001_01_01_000000_create_users_table.php
+│ │ ├── 0001_01_01_000001_create_cache_table.php
+│ │ ├── 0001_01_01_000002_create_jobs_table.php
+│ │ ├── 0001_01_02_000000_create_oauth_auth_codes_table.php
+│ │ ├── 0001_01_02_000001_create_oauth_access_tokens_table.php
+│ │ ├── 0001_01_02_000002_create_oauth_refresh_tokens_table.php
+│ │ ├── 0001_01_02_000003_create_oauth_clients_table.php
+│ │ ├── 0001_01_02_000004_create_oauth_device_codes_table.php
+│ │ ├── 0001_01_02_000005_create_permission_tables.php
+│ │ ├── 0001_01_03_000000_create_rooms_table.php
+│ │ ├── 0001_01_03_000001_create_games_table.php
+│ │ ├── 0001_01_03_000002_create_items_table.php
+│ │ ├── 0001_01_03_000003_create_interactions_table.php
+│ │ ├── 0001_01_03_000004_create_pockets_table.php
+│ │ ├── 0001_01_03_000005_create_records_table.php
+│ │ └── 0001_01_03_000006_create_pocket_items_table.php
+│ ├── seeders/
+│ │ ├── DatabaseSeeder.php
+│ │ ├── GameSeeder.php
+│ │ ├── InteractionSeeder.php
+│ │ ├── ItemSeeder.php
+│ │ ├── PocketItemSeeder.php
+│ │ ├── PocketSeeder.php
+│ │ ├── RecordSeeder.php
+│ │ ├── RoleSeeder.php
+│ │ ├── RoomSeeder.php
+│ │ └── UserSeeder.php
+│ └── database.sqlite
+├── docker/
+│ └── nginx/
+│ └── default.conf
+├── public/
+│ ├── images/
+│ │ └── APIT_logico.png
+│ ├── vendor/
+│ │ └── scribe/
+│ │ ├── css/
+│ │ ├── images/
+│ │ └── js/
+│ ├── favicon.ico
+│ ├── index.php
+│ └── robots.txt
+├── resources/
+│ ├── css/
+│ │ └── app.css
+│ ├── js/
+│ │ ├── app.js
+│ │ └── bootstrap.js
+│ └── views/
+│ ├── scribe/
+│ │ └── index.blade.php
+│ └── welcome.blade.php
+├── routes/
+│ ├── api.php
+│ ├── console.php
+│ └── web.php
+├── storage/
+│ ├── app/
+│ │ ├── private/
+│ │ └── public/
+│ ├── framework/
+│ │ ├── cache/
+│ │ ├── sessions/
+│ │ ├── testing/
+│ │ └── views/
+│ └── logs/
+├── tests/
+│ ├── Feature/
+│ │ ├── AdminUserTest.php
+│ │ ├── AuthTest.php
+│ │ ├── ExampleTest.php
+│ │ ├── GameApiTest.php
+│ │ ├── GamePlayTest.php
+│ │ └── UserMeTest.php
+│ ├── Unit/
+│ │ └── ExampleTest.php
+│ ├── Pest.php
+│ └── TestCase.php
+├── .dockerignore
+├── .editorconfig
+├── .env
+├── .env.example
+├── .gitattributes
+├── .gitignore
+├── artisan
+├── boost.json
+├── composer.json
+├── composer.lock
+├── docker-compose.yml
+├── Dockerfile
+├── package.json
+├── package-lock.json
+├── phpunit.xml
+├── README.md
+└── vite.config.js
+
+
+```
+
 # 🚀 Getting Started
 You can run the project in two ways:
 
