@@ -12,10 +12,11 @@ restarting the clock before the "Perfect Moment" becomes a permanent cage.
 ## 📚 Table of Contents
 
 - [Technologies](#-technologies)
+- [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
   - [Traditional Setup](#-option-1-traditional-setup)
   - [Docker Setup](#-option-2-docker-setup-recommended)
-- [Deployment (Render)](#-deployment-render)
+- [Deployment](#-deployment)
 - [Automated Testing (Pest)](#-automated-testing-with-pest)
 - [API Testing](#-manual-api-testing)
 
@@ -28,7 +29,7 @@ restarting the clock before the "Perfect Moment" becomes a permanent cage.
 - Documentation: Scribe
 - Deployment: Docker + Render + PostgreSQL
 
-# 🧬 project structure 
+# 🧬 Project Structure 
 
 ```
 APIT-API/
@@ -361,9 +362,9 @@ Regenerate Scribe docs
 docker compose exec app php artisan scribe:generate
 ```
 
-# ☁️ Deployment (Render)
+# ☁️ Deployment
 
-This API is deployed using Render + Docker + PostgreSQL.
+This API is deployed using **Render + Docker + PostgreSQL**.
 
 Production Stack   
 Hosting: Render   
